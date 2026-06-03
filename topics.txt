@@ -1,0 +1,105 @@
+Linear Regression
+Logistic Regression
+Decision Trees
+Random Forest
+K Means
+PCA
+SVM
+Neural Networks
+CNN
+RNN
+LSTM
+Transformers
+Reinforcement Learning
+Gradient Boosting
+XGBoost
+LightGBM
+CatBoost
+Feature Engineering
+Model Evaluation
+Hyperparameter Tuning
+Time Series Forecasting
+NLP
+Computer Vision
+Naive Bayes
+K-Nearest Neighbors
+DBSCAN
+Hierarchical Clustering
+t-SNE
+L1 and L2 Regularization
+Bias-Variance Tradeoff
+Overfitting and Underfitting
+Precision and Recall
+ROC and AUC
+Confusion Matrix
+Cross Validation
+Gradient Descent
+Stochastic Gradient Descent
+Adam Optimizer
+Backpropagation
+Activation Functions
+Batch Normalization
+Dropout Regularization
+Generative Adversarial Networks
+Variational Autoencoders
+Attention Mechanism
+BERT
+GPT Models
+Word Embeddings
+TF-IDF
+Tokenization
+Named Entity Recognition
+Sentiment Analysis
+Object Detection
+Image Segmentation
+Transfer Learning
+Few-Shot Learning
+Zero-Shot Learning
+Self-Supervised Learning
+Semi-Supervised Learning
+Active Learning
+Ensemble Learning
+Bagging vs Boosting
+Stacking Classifier
+AdaBoost
+Dimensionality Reduction
+Autoencoders
+Feedforward Neural Networks
+Gated Recurrent Units
+Sequence to Sequence Models
+Machine Translation
+Speech Recognition
+Text to Speech
+Image Classification
+YOLO Object Detector
+ResNet Architecture
+MobileNet
+Generative AI
+Large Language Models
+Prompt Engineering
+Retrieval-Augmented Generation
+Fine-Tuning LLMs
+Parameter-Efficient Fine-Tuning
+Reinforcement Learning from Human Feedback
+Q-Learning
+Deep Q-Networks
+Policy Gradient Methods
+Actor-Critic Algorithms
+Markov Decision Processes
+Singular Value Decomposition
+Gaussian Mixture Models
+Association Rule Learning
+Apriori Algorithm
+Anomaly Detection
+Isolation Forest
+One-Class SVM
+Data Imputation
+Label Encoding and One-Hot Encoding
+Feature Selection Methods
+SHAP and LIME Explainability
+Federated Learning
+Edge AI and Model Quantization
+ML Pipeline Orchestration
+Model Drift and Monitoring
+Vector Databases
+Cosine Similarity and Vector Search

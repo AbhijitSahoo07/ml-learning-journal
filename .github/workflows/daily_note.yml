@@ -1,0 +1,76 @@
+name: Daily ML Learning Note Generator
+
+on:
+  schedule:
+    # Runs at 00:00 UTC every day (approx. 5:30 AM IST)
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Force generation even if a note was already generated today'
+        required: false
+        type: boolean
+        default: false
+      model:
+        description: 'Gemini model to use'
+        required: false
+        type: string
+        default: 'gemini-2.5-flash'
+
+permissions:
+  contents: write
+
+jobs:
+  generate-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch all history to ensure proper versioning and avoid push conflicts
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run Note Generator
+        id: note_gen
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ github.event.inputs.model || 'gemini-2.5-flash' }}
+        run: |
+          FORCE_FLAG=""
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            FORCE_FLAG="--force"
+          fi
+          python generate_note.py $FORCE_FLAG
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Stage notes directory and topics file (in case topics file changes or is updated)
+          git add notes/
+          
+          # Check if there are changes staged for commit
+          if git diff --cached --quiet; then
+            echo "No changes detected. Skipping git push."
+          else
+            git commit -m "docs: Auto-generate daily learning note"
+            
+            # Rebase to prevent push conflicts
+            git pull --rebase origin main || git pull --rebase origin master
+            
+            # Push changes back to the origin
+            git push origin HEAD
+          fi
