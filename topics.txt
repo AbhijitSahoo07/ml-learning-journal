@@ -1,105 +1,396 @@
 Linear Regression
+Multiple Linear Regression
+Polynomial Regression
+Ridge Regression
+Lasso Regression
+Elastic Net Regression
 Logistic Regression
+Simple Perceptron
+Support Vector Machines (SVM)
+Support Vector Classifier (SVC)
+Support Vector Regressor (SVR)
+K-Nearest Neighbors (KNN) Classifier
+K-Nearest Neighbors (KNN) Regressor
 Decision Trees
-Random Forest
-K Means
-PCA
-SVM
-Neural Networks
-CNN
-RNN
-LSTM
-Transformers
-Reinforcement Learning
-Gradient Boosting
+Random Forest Classifier
+Random Forest Regressor
+Gradient Boosting Machines (GBM)
 XGBoost
 LightGBM
 CatBoost
-Feature Engineering
-Model Evaluation
-Hyperparameter Tuning
-Time Series Forecasting
-NLP
-Computer Vision
-Naive Bayes
-K-Nearest Neighbors
-DBSCAN
-Hierarchical Clustering
-t-SNE
-L1 and L2 Regularization
-Bias-Variance Tradeoff
-Overfitting and Underfitting
-Precision and Recall
-ROC and AUC
-Confusion Matrix
-Cross Validation
-Gradient Descent
-Stochastic Gradient Descent
-Adam Optimizer
-Backpropagation
-Activation Functions
-Batch Normalization
-Dropout Regularization
-Generative Adversarial Networks
-Variational Autoencoders
-Attention Mechanism
-BERT
-GPT Models
-Word Embeddings
-TF-IDF
-Tokenization
-Named Entity Recognition
-Sentiment Analysis
-Object Detection
-Image Segmentation
-Transfer Learning
-Few-Shot Learning
-Zero-Shot Learning
-Self-Supervised Learning
-Semi-Supervised Learning
-Active Learning
-Ensemble Learning
-Bagging vs Boosting
-Stacking Classifier
 AdaBoost
-Dimensionality Reduction
-Autoencoders
-Feedforward Neural Networks
-Gated Recurrent Units
-Sequence to Sequence Models
-Machine Translation
-Speech Recognition
-Text to Speech
-Image Classification
-YOLO Object Detector
-ResNet Architecture
-MobileNet
-Generative AI
-Large Language Models
-Prompt Engineering
-Retrieval-Augmented Generation
-Fine-Tuning LLMs
-Parameter-Efficient Fine-Tuning
-Reinforcement Learning from Human Feedback
-Q-Learning
-Deep Q-Networks
-Policy Gradient Methods
-Actor-Critic Algorithms
-Markov Decision Processes
-Singular Value Decomposition
-Gaussian Mixture Models
+Bagging
+Boosting
+Stacking
+Voting Classifiers
+K-Means Clustering
+DBSCAN Clustering
+Hierarchical Clustering
+Agglomerative Clustering
+BIRCH Clustering
+Mean Shift Clustering
+Gaussian Mixture Models (GMM)
+Principal Component Analysis (PCA)
+Independent Component Analysis (ICA)
+Linear Discriminant Analysis (LDA)
+t-Distributed Stochastic Neighbor Embedding (t-SNE)
+Uniform Manifold Approximation and Projection (UMAP)
+Singular Value Decomposition (SVD)
+Factor Analysis
 Association Rule Learning
 Apriori Algorithm
-Anomaly Detection
-Isolation Forest
+Eclat Algorithm
+Reinforcement Learning (Classical)
+Markov Decision Processes (MDPs)
+Q-Learning
+SARSA
+Model-Based Reinforcement Learning
+Model-Free Reinforcement Learning
+Expectation-Maximization (EM) Algorithm
+Naïve Bayes Classifier
+Gaussian Naïve Bayes
+Multinomial Naïve Bayes
+Bernoulli Naïve Bayes
 One-Class SVM
-Data Imputation
-Label Encoding and One-Hot Encoding
-Feature Selection Methods
-SHAP and LIME Explainability
-Federated Learning
-Edge AI and Model Quantization
-ML Pipeline Orchestration
-Model Drift and Monitoring
-Vector Databases
-Cosine Similarity and Vector Search
+Artificial Neural Networks (ANNs)
+Perceptron Learning Rule
+Backpropagation Algorithm
+Feedforward Neural Networks
+Recurrent Neural Networks (RNNs)
+Long Short-Term Memory (LSTM) Networks
+Gated Recurrent Units (GRUs)
+Convolutional Neural Networks (CNNs)
+Residual Networks (ResNets)
+Densely Connected Networks (DenseNets)
+Activation Functions
+Sigmoid Activation
+Tanh Activation
+ReLU Activation
+Leaky ReLU
+Parametric ReLU (PReLU)
+Exponential Linear Unit (ELU)
+Swish Activation
+Softmax Activation
+Optimizers
+Stochastic Gradient Descent (SGD)
+Mini-Batch Gradient Descent
+Adam Optimizer
+RMSprop Optimizer
+Adagrad Optimizer
+Adadelta Optimizer
+Nesterov Accelerated Gradient (NAG)
+Momentum Optimizer
+Learning Rate Schedules
+Learning Rate Decay
+Cosine Annealing
+Regularization Techniques
+L1 Regularization (Lasso)
+L2 Regularization (Ridge)
+Dropout
+Batch Normalization
+Layer Normalization
+Weight Decay
+Early Stopping
+Vanishing Gradients Problem
+Exploding Gradients Problem
+Gradient Clipping
+Xavier Initialization
+He Initialization
+Glorot Initialization
+Text Preprocessing
+Tokenization
+Word Tokenization
+Sentence Tokenization
+Stemming
+Lemmatization
+Stop Word Removal
+Part-of-Speech Tagging
+Named Entity Recognition (NER)
+Chunking (Shallow Parsing)
+Dependency Parsing
+Constituency Parsing
+N-grams
+Term Frequency-Inverse Document Frequency (TF-IDF)
+Bag-of-Words (BoW)
+Word Embeddings
+Word2Vec (Skip-gram)
+Word2Vec (CBOW)
+GloVe Embeddings
+FastText Embeddings
+Doc2Vec
+Sentence Embeddings
+Contextual Embeddings
+Encoder-Decoder Models
+Attention Mechanism
+Self-Attention
+Transformers Architecture
+Text Classification
+Sentiment Analysis
+Aspect-Based Sentiment Analysis
+Topic Modeling
+Latent Dirichlet Allocation (LDA)
+Non-negative Matrix Factorization (NMF)
+Machine Translation
+Neural Machine Translation
+Text Summarization (Extractive)
+Text Summarization (Abstractive)
+Question Answering Systems
+Chatbots
+Conversational AI
+Speech Recognition (ASR)
+Text-to-Speech (TTS) Synthesis
+Phonetics
+Phonology
+Morphology
+Image Classification
+Object Detection
+Semantic Segmentation
+Instance Segmentation
+Panoptic Segmentation
+Image Generation
+Image Captioning
+Image Reconstruction
+Image Denoising
+Image Super-Resolution
+Style Transfer
+Image Augmentation
+Data Augmentation for Images
+Edge Detection
+Corner Detection
+Feature Extraction (Traditional CV)
+SIFT Features
+SURF Features
+ORB Features
+Blob Detection
+Image Filtering
+Convolutional Layers
+Pooling Layers
+Transposed Convolutions
+Dilated Convolutions
+Depthwise Separable Convolutions
+Region-based CNNs (R-CNN)
+Faster R-CNN
+Mask R-CNN
+You Only Look Once (YOLO)
+Single Shot MultiBox Detector (SSD)
+U-Net Architecture
+Fully Convolutional Networks (FCNs)
+Vision Transformers (ViT)
+Swin Transformers
+Self-Supervised Learning for Vision
+Contrastive Learning for Vision
+Optical Character Recognition (OCR)
+Facial Recognition
+Pose Estimation
+3D Computer Vision
+Event Cameras
+Neural Radiance Fields (NeRFs) in CV
+Transformer Architecture (LLM context)
+Encoder-Decoder Transformers
+Decoder-Only Transformers
+Generative Pre-trained Transformers (GPTs)
+BERT Architecture
+RoBERTa
+T5 (Text-to-Text Transfer Transformer)
+ELECTRA
+XLNet
+GPT-2
+GPT-3
+GPT-3.5
+GPT-4
+LLaMA
+LLaMA 2
+Falcon LLM
+Claude LLM
+PaLM LLM
+Gemini LLM
+Instruction Tuning
+Fine-tuning LLMs
+Supervised Fine-Tuning (SFT)
+Domain-Specific Fine-Tuning
+Parameter-Efficient Fine-Tuning (PEFT)
+LoRA (Low-Rank Adaptation)
+QLoRA
+Prompt Engineering
+Zero-shot Prompting
+Few-shot Prompting
+Chain-of-Thought (CoT) Prompting
+Tree-of-Thought (ToT) Prompting
+Self-Consistency Prompting
+Generated Knowledge Prompting
+Persona Prompting
+Role Prompting
+Adversarial Prompting
+Prompt Optimization
+Prompt Chaining
+Multi-turn Conversations
+Context Window
+Token Limits
+Embeddings (LLM specific use)
+Semantic Search
+Vector Databases (LLM context)
+Retrieval-Augmented Generation (RAG) (LLM context)
+RAG Architectures
+LLM Quantization
+4-bit Quantization
+8-bit Quantization
+BitsAndBytes
+Reinforcement Learning from Human Feedback (RLHF)
+Direct Preference Optimization (DPO)
+Contextual Learning (In-Context Learning)
+Alignment Tax
+Catastrophic Forgetting
+Hallucinations in LLMs
+Bias in LLMs
+Explainability for LLMs (XAI for LLMs)
+Trustworthy AI for LLMs
+LLM Safety
+LLM Guardrails (Content Filtering)
+Prompt Injection
+Data Contamination
+Model Distillation
+Knowledge Distillation for LLMs
+Generative Adversarial Networks (GANs)
+Conditional GANs (cGANs)
+Deep Convolutional GANs (DCGANs)
+StyleGAN
+Pix2Pix
+CycleGAN
+Wasserstein GAN (WGAN)
+Variational Autoencoders (VAEs)
+Conditional VAE (CVAE)
+Diffusion Models
+Denoising Diffusion Probabilistic Models (DDPM)
+Latent Diffusion Models (LDMs)
+Stable Diffusion
+DALLE Models
+Midjourney
+Imagen
+Autoregressive Models
+PixelRNN
+PixelCNN
+Flow-based Generative Models
+Normalizing Flows
+Instant-NGP
+Generative Pre-trained Models
+Text-to-Image Generation
+Image-to-Image Translation
+Text-to-Video Generation
+Text-to-Audio Generation
+Generative Modeling for 3D Data
+Novel View Synthesis
+Image Inpainting
+Outpainting
+Diffusion Samplers
+Score-Based Generative Models
+Controllable Generation
+AI Agents
+Autonomous Agents
+Agent Architectures
+Deliberative Agents
+Reactive Agents
+Hybrid Agents
+Goal-Oriented Agents
+Knowledge-Based Agents
+Belief-Desire-Intention (BDI) Agents
+Agent Memory
+Episodic Memory
+Semantic Memory
+Procedural Memory
+Reflection Mechanism
+Self-Reflection Agents
+Planning for Agents
+Hierarchical Planning
+Task Planning
+Motion Planning
+Symbolic Planning
+Planning Domain Definition Language (PDDL)
+Tool Use in Agents
+Function Calling (Agent Tools)
+Tool Orchestration
+API Integration for Agents
+ReAct Framework
+SayCan Framework
+Chain-of-Thought Reasoning for Agents
+Multi-Agent Systems (MAS)
+Agent Communication
+Agent Coordination
+Agent Collaboration
+Agent Negotiation
+Swarm Intelligence
+Agent Simulation Environments
+LangChain Agents
+AutoGen Framework
+CrewAI Framework
+BabyAGI
+AutoGPT
+Agentic Workflows
+Human-in-the-Loop for Agents
+Agent Evaluation Metrics
+Agent Safety
+Agent Alignment
+Emergent Behavior in MAS
+Trust in AI Agents
+Explainable AI Agents
+Ethical AI Agents
+Reinforcement Learning for Agents
+Multi-Agent Reinforcement Learning (MARL)
+Agent State Representation
+Agent Observation Space
+Agent Action Space
+Decision-Making for Agents
+Situated AI
+Embodied AI Agents
+Cognitive Architectures
+Goal Reasoning
+Problem Solving for Agents
+Learning Agents
+Adaptive Agents
+Personal AI Agents
+Enterprise AI Agents
+Agent Tool Learning
+MLOps Principles
+LLMOps Principles
+Machine Learning Lifecycle
+Data Versioning
+Model Versioning
+Code Versioning
+Experiment Tracking
+MLflow
+Weights & Biases
+Data Pipelines
+Feature Stores
+Model Registry
+Model Packaging
+Model Deployment
+Batch Inference
+Real-time Inference
+Serverless Inference
+Edge Deployment
+Model Monitoring
+Data Drift Detection
+Concept Drift Detection
+Model Performance Monitoring
+Anomaly Detection for Monitoring
+Alerting Systems
+Retraining Pipelines
+CI/CD for ML
+Automated Testing for ML
+Model Explainability (XAI)
+SHAP (SHapley Additive exPlanations)
+LIME (Local Interpretable Model-agnostic Explanations)
+Responsible AI (RAI)
+AI Governance
+Fairness in AI
+Bias Detection
+Robustness Testing
+Adversarial Attacks
+LLM Evaluation Metrics
+RAG Evaluation
+A/B Testing for Models
+Canary Deployments
+Blue/Green Deployments
+Cost Optimization for LLMs
+LLM Gateway
+Prompt Versioning
+LLM Guardrails (LLMOps Mechanisms)
