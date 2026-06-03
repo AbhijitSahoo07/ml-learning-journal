@@ -17,6 +17,7 @@ import logging
 import os
 import re
 import sys
+import time
 from pathlib import Path
 from typing import Set, Tuple, Optional
 
@@ -193,22 +194,51 @@ List at least 3 high-quality learning resources, research papers, or documentati
 Ensure that all sections are highly detailed, informative, and free of placeholder text. Do not wrap the entire output in ```markdown ... ```. Output raw markdown.
 """
 
-    logger.info(f"Sending request to Gemini API for topic: '{topic}' using model: '{model_name}'...")
-    try:
-        response = client.models.generate_content(
-            model=model_name,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                system_instruction=system_instruction,
-                temperature=0.2, # Lower temperature for educational accuracy
+    max_retries = 5
+    base_delay = 2.0  # seconds
+    response = None
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            logger.info(
+                f"Sending request to Gemini API for topic: '{topic}' "
+                f"using model: '{model_name}' (Attempt {attempt}/{max_retries})..."
             )
-        )
-    except errors.APIError as e:
-        logger.error(f"Gemini API error occurred: {e}")
-        raise e
-    except Exception as e:
-        logger.error(f"An unexpected error occurred during API call: {e}")
-        raise e
+            response = client.models.generate_content(
+                model=model_name,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    system_instruction=system_instruction,
+                    temperature=0.2,  # Lower temperature for educational accuracy
+                )
+            )
+            break  # Successfully generated content, exit the retry loop
+        except errors.APIError as e:
+            # Check if error is due to rate limits (HTTP 429) or transient server errors (HTTP 500/503/504)
+            status_code = getattr(e, "code", None)
+            is_rate_limit = status_code in [429, 500, 503, 504] or "quota" in str(e).lower() or "exhausted" in str(e).lower()
+
+            if is_rate_limit and attempt < max_retries:
+                delay = base_delay * (2 ** (attempt - 1))
+                logger.warning(
+                    f"Gemini API rate limit or transient error hit (status code: {status_code}). "
+                    f"Retrying in {delay:.1f} seconds... Error: {e}"
+                )
+                time.sleep(delay)
+            else:
+                logger.error(f"Gemini API error occurred on attempt {attempt}: {e}")
+                raise e
+        except Exception as e:
+            # Catch transient network/client issues and retry
+            if attempt < max_retries:
+                delay = base_delay * (2 ** (attempt - 1))
+                logger.warning(
+                    f"Transient network or client error: {e}. Retrying in {delay:.1f} seconds..."
+                )
+                time.sleep(delay)
+            else:
+                logger.error(f"Unexpected error occurred on attempt {attempt}: {e}")
+                raise e
 
     if not response or not response.text:
         logger.error("Received empty response from Gemini API.")
