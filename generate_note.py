@@ -367,8 +367,8 @@ def main() -> None:
     parser.add_argument(
         "--max-per-day",
         type=int,
-        default=3,
-        help="Maximum number of notes to generate per day (default: 3)"
+        default=5,
+        help="Maximum number of notes to generate per day (default: 5)"
     )
     parser.add_argument(
         "--dry-run",
