@@ -394,3 +394,367 @@ Cost Optimization for LLMs
 LLM Gateway
 Prompt Versioning
 LLM Guardrails (LLMOps Mechanisms)
+Agentic Design Patterns
+Toolformer
+Reflexion
+Self-Correction in Agents
+Routing Agents
+Supervisor Agents
+Plan-and-Solve Agents
+LLM Compiler
+DSPy Framework
+Knowledge Graphs for Agents
+Arrays
+Linked Lists
+Stacks
+Queues
+Hash Tables
+Binary Trees
+Binary Search Trees (BST)
+AVL Trees
+Red-Black Trees
+Heaps (Min/Max)
+Tries
+Graph Representations
+Breadth-First Search (BFS)
+Depth-First Search (DFS)
+Dijkstra's Algorithm
+Bellman-Ford Algorithm
+Floyd-Warshall Algorithm
+Prim's Algorithm
+Kruskal's Algorithm
+Topological Sort
+Disjoint Sets (Union-Find)
+Dynamic Programming (DP)
+Memoization
+Tabulation
+Knapsack Problem
+Longest Common Subsequence (LCS)
+Greedy Algorithms
+Divide and Conquer
+Binary Search
+Merge Sort
+Quick Sort
+Sliding Window Technique
+Two Pointers Technique
+Backtracking
+Bit Manipulation
+Time Complexity (Big O)
+Space Complexity
+System Design Interview
+Machine Learning System Design
+Coding Interview (DSA)
+Behavioral Interview (STAR Method)
+Data Science Case Studies
+A/B Testing Case Studies
+SQL Interview Questions
+Probability and Statistics Questions
+MLOps Interview Questions
+Generative AI Interview Questions
+LLM Architecture Questions
+Prompt Engineering Scenarios
+Agent Identity and Persona
+Multi-Agent Communication Protocols
+KQML
+FIPA-ACL
+Blackboard Architecture
+BDI Agent Architecture
+Contract Net Protocol
+Belief Revision
+Epistemic Logic for Agents
+Action Representation
+Situation Calculus
+Event Calculus
+Temporal Logic in AI
+Decentralized POMDPs
+Swarm Robotics
+Foraging Behavior in Agents
+Ant Colony Optimization (Agent Context)
+Particle Swarm Optimization (Agent Context)
+Agent-Based Modeling
+NetLogo
+Agent-Based Computational Economics
+Trust and Reputation Models
+Agent Reputation Systems
+Coalition Formation
+Cooperative Game Theory
+Mechanism Design
+Auctions in Multi-Agent Systems
+VCG Mechanism
+Combinatorial Auctions
+Bargaining Algorithms
+Negotiation Protocols
+Argumentation Frameworks
+Preference Elicitation
+Normative Systems
+Electronic Institutions
+Open Agent Architectures
+Service-Oriented Agents
+Grid Computing and Agents
+Mobile Agents
+Aglets
+Agent Migration
+Security for Mobile Agents
+Ontology and Agents
+Semantic Web Agents
+Web Services and Agents
+Agent-Oriented Software Engineering
+Gaia Methodology
+Prometheus Methodology
+Tropos Methodology
+MaSE Methodology
+O-MaSE
+Agent UML (AUML)
+PASSI Methodology
+INGENIAS
+JADE (Java Agent Development Framework)
+AgentBuilder
+JACK Intelligent Agents
+Jadex
+Jason (AgentSpeak)
+BDI Programming
+Centralized Training Decentralized Execution (CTDE)
+Value Decomposition Networks (VDN)
+QMIX
+MADDPG
+MAPPO
+Independent Q-Learning
+Opponent Modeling
+Fictitious Play
+Minimax-Q
+Nash Q-Learning
+Mean Field Games
+Hierarchical Multi-Agent RL
+Multi-Agent Exploration
+Credit Assignment in MARL
+Ad Hoc Teamwork
+Zero-Shot Coordination
+Self-Play
+Population-Based Training
+Evolutionary Algorithms for Agents
+Neuroevolution
+NEAT
+HyperNEAT
+Interactive Reinforcement Learning
+Imitation Learning in Agents
+Inverse Reinforcement Learning (IRL)
+Apprenticeship Learning
+Behavior Cloning
+DAgger
+Safe Reinforcement Learning
+Constrained MDPs
+Reward Shaping
+Potential-Based Reward Shaping
+Curriculum Learning for Agents
+Multi-Task Learning in Agents
+Meta-Learning for Agents
+Transfer Learning for Agents
+Lifelong Learning Agents
+Continual Learning in Agents
+Dynamic Arrays
+Amortized Analysis
+Circular Buffers
+Skip Lists
+Doubly Linked Lists
+Circular Linked Lists
+XOR Linked Lists
+Unrolled Linked Lists
+Splay Trees
+Treaps
+B-Trees
+B+ Trees
+2-3 Trees
+2-3-4 Trees
+Suffix Trees
+Suffix Automata
+Suffix Arrays
+LCP Array
+Prefix Trees (Tries)
+Radix Trees
+Fenwick Trees (Binary Indexed Trees)
+Segment Trees
+Lazy Propagation
+K-D Trees
+Quadtrees
+Octrees
+Cartesian Trees
+R-Trees
+Bloom Filters
+Cuckoo Hashing
+Robin Hood Hashing
+Consistent Hashing
+Perfect Hashing
+Universal Hashing
+Extendible Hashing
+Linear Probing
+Quadratic Probing
+Double Hashing
+Disjoint Set Union (DSU) with Path Compression
+DSU with Union by Rank
+Minimum Spanning Trees (MST)
+Boruvka's Algorithm
+Tarjan's Strongly Connected Components Algorithm
+Kosaraju's Algorithm
+Articulation Points
+Bridges in Graphs
+Eulerian Paths and Circuits
+Hamiltonian Paths and Circuits
+Graph Coloring
+Bipartite Graphs
+Maximum Bipartite Matching
+Hopcroft-Karp Algorithm
+Ford-Fulkerson Algorithm
+Edmonds-Karp Algorithm
+Dinic's Algorithm
+Push-Relabel Maximum Flow
+Min-Cut Max-Flow Theorem
+Minimum Cost Maximum Flow
+Maximum Independent Set
+Vertex Cover
+Clique Problem
+Traveling Salesperson Problem (TSP)
+Chinese Postman Problem
+Graph Isomorphism
+Planar Graphs
+Euler's Formula for Planar Graphs
+Tree Traversals (Inorder, Preorder, Postorder, Level-order)
+Morris Traversal
+Lowest Common Ancestor (LCA)
+Binary Lifting
+Tree Diameter
+Tree Centroid
+Heavy-Light Decomposition
+Centroid Decomposition
+Cycle Detection in Graphs
+Topological Sorting (Kahn's Algorithm)
+Shortest Path in Directed Acyclic Graphs (DAG)
+Longest Path in DAG
+A* Search Algorithm
+IDA* Search
+Bidirectional Search
+Jump Point Search
+String Searching Algorithms
+Naive String Matching
+Rabin-Karp Algorithm
+Knuth-Morris-Pratt (KMP) Algorithm
+Z Algorithm
+Boyer-Moore Algorithm
+Aho-Corasick Algorithm
+Longest Palindromic Substring (Manacher's Algorithm)
+Longest Common Substring
+Edit Distance (Levenshtein Distance)
+Bitonic Sort
+Radix Sort
+Bucket Sort
+Counting Sort
+Heap Sort
+Insertion Sort
+Selection Sort
+Bubble Sort
+Shell Sort
+Comb Sort
+Pancake Sorting
+External Sorting
+K-Way Merge Algorithm
+Median of Medians
+Quickselect
+Database Design Interviews
+SQL Window Functions
+SQL CTEs (Common Table Expressions)
+Recursive SQL Queries
+SQL Indexing Strategies
+Query Optimization
+Database Normalization (1NF, 2NF, 3NF, BCNF)
+Denormalization
+ACID Properties
+BASE Properties
+CAP Theorem
+PACELC Theorem
+Sharding vs Partitioning
+Database Replication
+Active-Active vs Active-Passive Replication
+NoSQL vs SQL
+Key-Value Stores
+Document Databases
+Wide-Column Stores
+Graph Databases
+Object-Relational Mapping (ORM)
+Caching Strategies (Cache Aside, Read Through, Write Through, Write Behind)
+Redis vs Memcached
+Content Delivery Networks (CDNs)
+Load Balancing Algorithms (Round Robin, Least Connections, IP Hash)
+Consistent Hashing in System Design
+Microservices vs Monoliths
+API Gateway Pattern
+Service Mesh
+Circuit Breaker Pattern
+Rate Limiting Algorithms (Token Bucket, Leaky Bucket, Sliding Window Log)
+Distributed Locks
+Leader Election (Raft, Paxos)
+Zookeeper
+Message Queues (Kafka, RabbitMQ, SQS)
+Pub/Sub Architecture
+Event-Driven Architecture
+CQRS (Command Query Responsibility Segregation)
+Event Sourcing
+Saga Pattern
+Distributed Tracing
+Logging and Monitoring
+SLOs/SLIs/SLAs
+High Availability vs Fault Tolerance
+Scalability (Vertical vs Horizontal)
+MapReduce Framework
+Hadoop Ecosystem
+Apache Spark
+Stream Processing (Flink, Kafka Streams)
+Batch Processing
+Big Data File Formats (Parquet, ORC, Avro)
+Data Lakes vs Data Warehouses
+ETL vs ELT
+Snowflake Schema vs Star Schema
+Dimensional Modeling
+Machine Learning Pipeline Design
+Feature Engineering Interviews
+Dealing with Missing Data
+Dealing with Imbalanced Datasets
+Outlier Detection Methods
+Feature Selection Methods
+PCA in Practice
+Cross-Validation Techniques (K-Fold, Stratified, LOOCV)
+Hyperparameter Tuning (Grid Search, Random Search, Bayesian Optimization)
+Evaluation Metrics (Accuracy, Precision, Recall, F1-Score)
+ROC and AUC
+Log Loss
+Mean Squared Error (MSE)
+Mean Absolute Error (MAE)
+R-Squared
+BLEU Score
+ROUGE Score
+Perplexity
+Hardware and GPU considerations for DL
+Quantization and Pruning Questions
+Model Serving (TensorFlow Serving, TorchServe, ONNX)
+Model Drift and Concept Drift handling
+A/B Testing Statistics (p-value, statistical significance, confidence intervals)
+Sample Size Determination in A/B Testing
+Multi-Armed Bandits vs A/B Testing
+Simpson's Paradox
+Central Limit Theorem
+Hypothesis Testing (T-test, Z-test, ANOVA, Chi-Square)
+Bayes' Theorem Questions
+Probability Distributions (Normal, Binomial, Poisson, Exponential)
+Expected Value Questions
+Combinatorics and Permutations
+Matrix Operations in Interviews
+Eigenvalues and Eigenvectors
+Gradient Descent variations (SGD, Momentum, Adam) tradeoffs
+Overfitting and Underfitting
+Bias-Variance Tradeoff
+Regularization Techniques in depth
+Explaining algorithms to non-technical stakeholders
+Cultural Fit Questions
+Conflict Resolution Questions
+Project Management Experience
+Agile and Scrum Methodology
+Handling Failure in Projects
+Time Management Strategies
