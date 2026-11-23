@@ -172,103 +172,41 @@ def generate_note_content(topic: str, model_name: str = "gemini-2.0-flash", key_
             candidate_models.append(alt)
 
     system_instruction = (
-        "You are an expert AI and Machine Learning educator. Your goal is to write a highly detailed, "
-        "comprehensive, and beginner-friendly study note in Markdown format about the requested ML topic. "
-        "Do not wrap your final output in markdown code blocks like ```markdown ... ```. Output raw markdown. "
-        "Strictly follow the requested headings and ensure the explanation is rich, engaging, and contains practical code and questions."
+        "You are an expert AI and Machine Learning educator. Your goal is to write a concise, punchy, "
+        "and beginner-friendly study note of approximately 100 words in raw Markdown format about the requested ML topic. "
+        "Strictly limit the entire note to around 100 words. Do not wrap the final output in markdown code fences like ```markdown ... ```. Output raw markdown."
     )
 
-    prompt = f"""
-Write a comprehensive, beginner-friendly, and detailed study note on the topic: "{topic}".
-The output must strictly be in markdown format and contain the following exact headers and structure:
+    prompt = f"""Write a concise, high-yield study note of approximately 100 words on the topic: "{topic}".
+The output must strictly be around 100 words in raw markdown format, following this exact structure:
 
 # {topic}
 
-## Overview
-Provide a clear, high-level, and beginner-friendly introduction to {topic}.
+### Core Concept
+A clear, 1-2 sentence explanation of what {topic} is and why it matters in machine learning.
 
-## What Problem It Solves
-Explain the core problems or challenges that {topic} addresses. Why is it needed in machine learning?
+### Key Mechanism & Intuition
+2-3 concise sentences detailing how it works, including any essential mathematical intuition or formula (use $...$ for inline LaTeX if applicable).
 
-## How It Works
-Detail the step-by-step mechanism of {topic}. Break down the algorithm, training process, or pipeline in simple terms.
+### Key Takeaway
+A punchy 1-2 bullet point summary or practical insight for real-world usage and interviews.
 
-## Mathematical Intuition
-Explain the mathematical concepts, equations, and logic behind {topic}. Use LaTeX formatting for mathematical expressions:
-- Inline math should be wrapped in single dollar signs, like $y = mx + c$.
-- Block equations should be wrapped in double dollar signs, like $$f(x) = \\frac{{1}}{{1 + e^{{-x}}}}$$.
-Break down the equations so a beginner can understand them.
+Strictly adhere to the 100-word limit. Do not include excessive code or boilerplate."""
 
-## Advantages
-List the pros and strengths of using {topic} (e.g., in bullet points).
-
-## Disadvantages
-List the cons, limitations, and potential pitfalls of {topic} (e.g., in bullet points).
-
-## Real World Applications
-Provide 3-5 concrete real-world use cases or industries where {topic} is actively applied.
-
-## Python Example
-Provide a complete, standalone, and working Python code snippet demonstrating {topic}.
-- Use popular libraries such as scikit-learn, numpy, pandas, or matplotlib.
-- The example should generate or load a dummy dataset, fit the model/operation, make predictions/results, and evaluate or print the output.
-- Write clean Python code with helpful comments.
-
-## Interview Questions
-Provide a list of at least 10 relevant technical interview questions about {topic}, complete with comprehensive, detailed answers.
-
-## Quiz
-Provide a multiple-choice quiz with at least 5 conceptual questions.
-- Each question must have 4 options: A), B), C), and D).
-- At the very end of the Quiz section, provide an Answer Key with brief explanations for each correct option.
-
-## Further Reading
-List at least 3 high-quality learning resources, research papers, or documentation links (e.g., official docs, textbook chapters).
-
-Ensure that all sections are highly detailed, informative, and free of placeholder text. Do not wrap the entire output in ```markdown ... ```. Output raw markdown.
-"""
-
-    fallback_prompt = f"""
-Write a concise study note on the topic: "{topic}".
-The output must strictly be in markdown format and contain the following exact headers and structure:
+    fallback_prompt = f"""Write an ultra-concise 80-100 word study note on "{topic}":
 
 # {topic}
 
-## Overview
-Provide a clear, high-level introduction to {topic}.
+### Core Concept
+[1-2 clear sentences defining the topic]
 
-## What Problem It Solves
-Explain the core problems that {topic} addresses.
+### How It Works
+[2 concise sentences on the mechanism or formula]
 
-## How It Works
-Detail the mechanism of {topic} in simple terms.
+### Key Takeaway
+- [Essential practical takeaway]
 
-## Mathematical Intuition
-Briefly explain the key mathematical concepts and logic behind {topic} using LaTeX.
-
-## Advantages
-List the main advantages of using {topic}.
-
-## Disadvantages
-List the key limitations of {topic}.
-
-## Real World Applications
-Provide 2-3 real-world use cases where {topic} is applied.
-
-## Python Example
-Provide a short, standalone Python code snippet demonstrating {topic}.
-
-## Interview Questions
-Provide a list of 3 key technical interview questions about {topic}, with answers.
-
-## Quiz
-Provide a multiple-choice quiz with 2 conceptual questions, with answers.
-
-## Further Reading
-List 2-3 learning resources or documentation links.
-
-Ensure that all sections are concise and informative. Do not wrap the entire output in ```markdown ... ```. Output raw markdown.
-"""
+Keep the output strictly under 100 words in raw markdown."""
 
     max_retries = 6
     base_delay = 5.0  # seconds
@@ -307,6 +245,7 @@ Ensure that all sections are concise and informative. Do not wrap the entire out
                 config=types.GenerateContentConfig(
                     system_instruction=system_instruction,
                     temperature=0.2,  # Lower temperature for educational accuracy
+                    max_output_tokens=350,  # Strictly limit output to ~100 words
                 )
             )
             break  # Successfully generated content, exit the retry loop
@@ -325,7 +264,10 @@ Ensure that all sections are concise and informative. Do not wrap the entire out
                     response = client.models.generate_content(
                         model=current_model,
                         contents=combined_prompt,
-                        config=types.GenerateContentConfig(temperature=0.2)
+                        config=types.GenerateContentConfig(
+                            temperature=0.2,
+                            max_output_tokens=350,
+                        )
                     )
                     break
                 except Exception as inner_e:

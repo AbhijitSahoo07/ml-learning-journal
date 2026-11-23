@@ -40,14 +40,11 @@ ml-learning-journal/
   - **AWS Machine Learning & Cloud AI:** Amazon SageMaker (Studio, Pipelines, Model Registry, Endpoints, Feature Store, JumpStart), Amazon Bedrock, Rekognition, Comprehend, Textract, Kendra, Lex, Transcribe, Polly, and AWS MLOps infrastructure.
   - **NLP, Transformers & Modern GenAI:** Tokenization (BPE, WordPiece), Attention mechanisms, BERT/T5/LLaMA/Mistral architectures, PEFT (LoRA, QLoRA), Alignment (RLHF, DPO, ORPO), RAG architectures, Vector DBs, vLLM, and Quantization.
 - **💡 State-Aware Progression:** Inspects the `notes/` directory to track what topics have already been covered and automatically picks the next topic from `topics.txt`—preventing duplicates without database overhead.
-- **📚 Rich Note Structure:** Every note is generated in a clean, beginner-friendly Markdown format featuring:
-  - **Overview & Problem Solving:** Real-world context.
-  - **Algorithm Breakdown:** Step-by-step logic.
-  - **Mathematical Intuition:** Detailed LaTeX equations ($y = mx + c$).
-  - **Python Examples:** Runnable code snippets using `scikit-learn`, `numpy`, and `pandas`.
-  - **Interview Prep:** 10+ detailed interview Q&As per topic.
-  - **Interactive Learning:** 5+ multiple-choice questions (MCQs) with explanations.
-  - **Curated Reading:** 3+ handpicked resource recommendations.
+- **📚 Crisp ~100-Word Note Structure:** Every note is generated as a high-yield, bite-sized study card (~100 words) featuring:
+  - **Core Concept:** A punchy 1-2 sentence overview explaining what it is and why it matters.
+  - **Key Mechanism & Intuition:** Concise explanation of how it works with essential LaTeX equations ($y = mx + c$).
+  - **Key Practical Takeaway:** Actionable insight for production applications and technical interviews.
+  - **Ultra-Fast & Quota-Safe:** Lightweight ~100-word footprint generates in <1 second and eliminates token rate-limit bottlenecks.
 - **🛡️ Fail-Safe Controls:** Handles API timeouts, rate limits, duplicate runs, and git conflicts gracefully with automated retry loops and exponential backoff.
 
 ---
