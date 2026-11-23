@@ -120,29 +120,33 @@ def get_gemini_api_keys() -> list[str]:
     """
     Collect all Gemini API keys from environment variables.
     Supports GEMINI_API_KEY, GEMINI_API_KEYS, or GEMINI_API_KEY_1, GEMINI_API_KEY_2, etc.,
-    with comma-separated, semicolon-separated, or newline-separated values.
+    with comma-separated, semicolon-separated, space-separated, or newline-separated values.
     
     Returns:
         A list of unique API key strings.
     """
     keys = []
+    detected_vars = []
     for env_var, value in os.environ.items():
-        if env_var.startswith("GEMINI_API_KEY") and value:
-            for k in re.split(r"[,;\n\r]+", value):
-                k = k.strip()
-                if k and k not in keys:
-                    keys.append(k)
+        if ("GEMINI" in env_var.upper() and "KEY" in env_var.upper()) or env_var.startswith("GEMINI_API"):
+            if value:
+                detected_vars.append(env_var)
+                for k in re.split(r"[,;\s\|\n\r]+", value):
+                    k = k.strip()
+                    if k and k not in keys:
+                        keys.append(k)
+    logger.info(f"Loaded {len(keys)} Gemini API key(s) from environment: {detected_vars}")
     return keys
 
 
-def generate_note_content(topic: str, model_name: str = "gemini-2.0-flash", key_offset: Optional[int] = None) -> str:
+def generate_note_content(topic: str, model_name: str = "gemini-3.8-flash", key_offset: Optional[int] = None) -> str:
     """
     Call the Gemini API using the google-genai library to generate a note for the given topic.
-    Supports seamless automatic key rotation, model fallback cascade, and rate-limit bypass.
+    Supports seamless automatic key rotation, high-demand backoff, and rate-limit bypass.
     
     Args:
         topic: The topic name.
-        model_name: The preferred Gemini model identifier (default: gemini-2.0-flash).
+        model_name: The Gemini model identifier (default: gemini-3.8-flash).
         key_offset: Optional starting key index for round-robin rotation.
         
     Returns:
@@ -153,9 +157,9 @@ def generate_note_content(topic: str, model_name: str = "gemini-2.0-flash", key_
         Exception: For API errors or connection failures.
     """
     # Upgrade deprecated model identifiers
-    if "2.5-flash" in model_name:
-        logger.info(f"Upgrading deprecated model identifier '{model_name}' to 'gemini-2.0-flash'.")
-        model_name = "gemini-2.0-flash"
+    if "2.5-flash" in model_name or "2.0-flash" in model_name or "1.5-flash" in model_name:
+        logger.info(f"Mapping model identifier '{model_name}' to official 'gemini-3.8-flash'.")
+        model_name = "gemini-3.8-flash"
 
     api_keys = get_gemini_api_keys()
     if not api_keys:
@@ -164,12 +168,6 @@ def generate_note_content(topic: str, model_name: str = "gemini-2.0-flash", key_
 
     if key_offset is None:
         key_offset = random.randint(0, len(api_keys) - 1)
-
-    # High-availability model candidate cascade
-    candidate_models = [model_name]
-    for alt in ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-3.8-flash"]:
-        if alt not in candidate_models:
-            candidate_models.append(alt)
 
     system_instruction = (
         "You are an expert AI and Machine Learning educator. Your goal is to write a concise, punchy, "
@@ -208,7 +206,7 @@ Strictly adhere to the 100-word limit. Do not include excessive code or boilerpl
 
 Keep the output strictly under 100 words in raw markdown."""
 
-    max_retries = 6
+    max_retries = 8
     base_delay = 5.0  # seconds
     response = None
 
@@ -217,9 +215,7 @@ Keep the output strictly under 100 words in raw markdown."""
         key_index = (key_offset + attempt - 1) % len(api_keys)
         current_key = api_keys[key_index]
         masked_key = f"{current_key[:6]}...{current_key[-4:]}" if len(current_key) > 10 else "***"
-
-        # Select model from candidate cascade
-        current_model = candidate_models[(attempt - 1) % len(candidate_models)]
+        current_model = model_name
         
         # Switch to fallback prompt (retrieving less content) on attempt 3 or later to avoid token/rate limits
         current_prompt = prompt if attempt < 3 else fallback_prompt
@@ -276,27 +272,19 @@ Keep the output strictly under 100 words in raw markdown."""
             # Check if error is due to high demand (HTTP 503), rate limits (HTTP 429), or transient server issues
             is_high_demand = status_code in [503, 502, 504] or "high demand" in error_msg or "unavailable" in error_msg
             is_rate_limit = status_code in [429] or "quota" in error_msg or "exhausted" in error_msg
-            is_not_found = status_code in [404] or "not_found" in error_msg or "no longer available" in error_msg
 
-            if (is_high_demand or is_rate_limit or is_not_found or status_code == 500) and attempt < max_retries:
-                next_model = candidate_models[attempt % len(candidate_models)]
-                if is_high_demand or is_not_found:
-                    delay = 2.0  # Fast transition to fallback model
+            if (is_high_demand or is_rate_limit or status_code == 500) and attempt < max_retries:
+                if len(api_keys) > 1:
+                    delay = 2.0
                     logger.warning(
-                        f"Attempt {attempt}: Model '{current_model}' hit status {status_code} ({'High Demand/503' if is_high_demand else 'Not Found/404'}). "
-                        f"Immediately rotating to fallback model '{next_model}' in {delay:.1f}s..."
-                    )
-                elif len(api_keys) > 1 and attempt < len(api_keys):
-                    delay = 1.5
-                    logger.warning(
-                        f"Attempt {attempt}: Rate limit hit on key #{key_index + 1}. "
-                        f"Rotating to key #{((key_index + 1) % len(api_keys)) + 1} and model '{next_model}' in {delay:.1f}s..."
+                        f"Attempt {attempt}: Hit status {status_code} ({'High Demand/503' if is_high_demand else 'Rate Limit'}). "
+                        f"Rotating to next API key #{((key_index + 1) % len(api_keys)) + 1} in {delay:.1f}s..."
                     )
                 else:
-                    delay = base_delay * (2 ** (attempt - 1))
+                    delay = base_delay * (1.5 ** (attempt - 1))
                     logger.warning(
-                        f"Attempt {attempt}: Transient error hit (status code: {status_code}). "
-                        f"Retrying with model '{next_model}' in {delay:.1f} seconds... Error: {e}"
+                        f"Attempt {attempt}: Gemini API is experiencing high demand (status {status_code}). "
+                        f"Backing off for {delay:.1f}s to allow demand spike to clear... Error: {e}"
                     )
                 time.sleep(delay)
             else:
@@ -469,8 +457,8 @@ def main() -> None:
     parser.add_argument(
         "--model",
         type=str,
-        default=os.environ.get("GEMINI_MODEL", "gemini-2.0-flash"),
-        help="Gemini model to use (default: gemini-2.0-flash)"
+        default=os.environ.get("GEMINI_MODEL", "gemini-3.8-flash"),
+        help="Gemini model to use (default: gemini-3.8-flash)"
     )
     parser.add_argument(
         "--notes-dir",
