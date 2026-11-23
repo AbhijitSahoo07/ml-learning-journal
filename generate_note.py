@@ -135,14 +135,14 @@ def get_gemini_api_keys() -> list[str]:
     return keys
 
 
-def generate_note_content(topic: str, model_name: str = "gemini-3.8-flash", key_offset: Optional[int] = None) -> str:
+def generate_note_content(topic: str, model_name: str = "gemini-2.0-flash", key_offset: Optional[int] = None) -> str:
     """
     Call the Gemini API using the google-genai library to generate a note for the given topic.
-    Supports seamless automatic key rotation and rate-limit bypass across multiple API keys.
+    Supports seamless automatic key rotation, model fallback cascade, and rate-limit bypass.
     
     Args:
         topic: The topic name.
-        model_name: The Gemini model identifier.
+        model_name: The preferred Gemini model identifier (default: gemini-2.0-flash).
         key_offset: Optional starting key index for round-robin rotation.
         
     Returns:
@@ -152,10 +152,10 @@ def generate_note_content(topic: str, model_name: str = "gemini-3.8-flash", key_
         ValueError: If the API returns an empty response or no API keys found.
         Exception: For API errors or connection failures.
     """
-    # Automatically upgrade deprecated model identifiers
+    # Upgrade deprecated model identifiers
     if "2.5-flash" in model_name:
-        logger.info(f"Upgrading deprecated model identifier '{model_name}' to 'gemini-3.8-flash'.")
-        model_name = "gemini-3.8-flash"
+        logger.info(f"Upgrading deprecated model identifier '{model_name}' to 'gemini-2.0-flash'.")
+        model_name = "gemini-2.0-flash"
 
     api_keys = get_gemini_api_keys()
     if not api_keys:
@@ -164,6 +164,12 @@ def generate_note_content(topic: str, model_name: str = "gemini-3.8-flash", key_
 
     if key_offset is None:
         key_offset = random.randint(0, len(api_keys) - 1)
+
+    # High-availability model candidate cascade
+    candidate_models = [model_name]
+    for alt in ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-3.8-flash"]:
+        if alt not in candidate_models:
+            candidate_models.append(alt)
 
     system_instruction = (
         "You are an expert AI and Machine Learning educator. Your goal is to write a highly detailed, "
@@ -273,6 +279,9 @@ Ensure that all sections are concise and informative. Do not wrap the entire out
         key_index = (key_offset + attempt - 1) % len(api_keys)
         current_key = api_keys[key_index]
         masked_key = f"{current_key[:6]}...{current_key[-4:]}" if len(current_key) > 10 else "***"
+
+        # Select model from candidate cascade
+        current_model = candidate_models[(attempt - 1) % len(candidate_models)]
         
         # Switch to fallback prompt (retrieving less content) on attempt 3 or later to avoid token/rate limits
         current_prompt = prompt if attempt < 3 else fallback_prompt
@@ -284,7 +293,7 @@ Ensure that all sections are concise and informative. Do not wrap the entire out
         try:
             logger.info(
                 f"Sending request to Gemini API for topic: '{topic}' "
-                f"using model: '{model_name}' with key #{key_index + 1}/{len(api_keys)} ({masked_key}) "
+                f"using model: '{current_model}' with key #{key_index + 1}/{len(api_keys)} ({masked_key}) "
                 f"(Attempt {attempt}/{max_retries})..."
             )
             # Initialize Client dynamically with the rotated key using v1beta API version
@@ -293,7 +302,7 @@ Ensure that all sections are concise and informative. Do not wrap the entire out
                 http_options=types.HttpOptions(api_version="v1beta")
             )
             response = client.models.generate_content(
-                model=model_name,
+                model=current_model,
                 contents=current_prompt,
                 config=types.GenerateContentConfig(
                     system_instruction=system_instruction,
@@ -303,25 +312,7 @@ Ensure that all sections are concise and informative. Do not wrap the entire out
             break  # Successfully generated content, exit the retry loop
         except errors.APIError as e:
             error_msg = str(e).lower()
-            # If the API reports model not found / deprecated (e.g. gemini-2.5-flash deprecated for gemini-3.8-flash)
-            if "no longer available" in error_msg or "gemini-3.8-flash" in error_msg or (getattr(e, "code", None) == 404 and "2.5" in model_name):
-                logger.warning(
-                    f"Attempt {attempt}: Model '{model_name}' is deprecated or not found. "
-                    f"Upgrading model to 'gemini-3.8-flash' and retrying immediately..."
-                )
-                model_name = "gemini-3.8-flash"
-                try:
-                    response = client.models.generate_content(
-                        model=model_name,
-                        contents=current_prompt,
-                        config=types.GenerateContentConfig(
-                            system_instruction=system_instruction,
-                            temperature=0.2,
-                        )
-                    )
-                    break
-                except Exception as model_fallback_e:
-                    logger.warning(f"Fallback to gemini-3.8-flash failed: {model_fallback_e}")
+            status_code = getattr(e, "code", None)
 
             # If the API complains about developer instruction or v1 vs v1beta, fallback to embedding system instruction in prompt
             if "developer instruction" in error_msg or "v1beta" in error_msg:
@@ -332,7 +323,7 @@ Ensure that all sections are concise and informative. Do not wrap the entire out
                 try:
                     combined_prompt = f"{system_instruction}\n\n{current_prompt}"
                     response = client.models.generate_content(
-                        model=model_name,
+                        model=current_model,
                         contents=combined_prompt,
                         config=types.GenerateContentConfig(temperature=0.2)
                     )
@@ -340,23 +331,30 @@ Ensure that all sections are concise and informative. Do not wrap the entire out
                 except Exception as inner_e:
                     logger.warning(f"Embedded instruction fallback attempt failed: {inner_e}")
 
-            # Check if error is due to rate limits (HTTP 429) or transient server errors (HTTP 500/503/504)
-            status_code = getattr(e, "code", None)
-            is_rate_limit = status_code in [429, 500, 503, 504] or "quota" in str(e).lower() or "exhausted" in str(e).lower()
+            # Check if error is due to high demand (HTTP 503), rate limits (HTTP 429), or transient server issues
+            is_high_demand = status_code in [503, 502, 504] or "high demand" in error_msg or "unavailable" in error_msg
+            is_rate_limit = status_code in [429] or "quota" in error_msg or "exhausted" in error_msg
+            is_not_found = status_code in [404] or "not_found" in error_msg or "no longer available" in error_msg
 
-            if is_rate_limit and attempt < max_retries:
-                # If multiple keys are available, rotate immediately to next key with brief 1.5s pause
-                if len(api_keys) > 1 and attempt < len(api_keys):
+            if (is_high_demand or is_rate_limit or is_not_found or status_code == 500) and attempt < max_retries:
+                next_model = candidate_models[attempt % len(candidate_models)]
+                if is_high_demand or is_not_found:
+                    delay = 2.0  # Fast transition to fallback model
+                    logger.warning(
+                        f"Attempt {attempt}: Model '{current_model}' hit status {status_code} ({'High Demand/503' if is_high_demand else 'Not Found/404'}). "
+                        f"Immediately rotating to fallback model '{next_model}' in {delay:.1f}s..."
+                    )
+                elif len(api_keys) > 1 and attempt < len(api_keys):
                     delay = 1.5
                     logger.warning(
-                        f"Gemini API rate limit hit on key #{key_index + 1}. "
-                        f"Immediately rotating to next key #{((key_index + 1) % len(api_keys)) + 1} in {delay}s..."
+                        f"Attempt {attempt}: Rate limit hit on key #{key_index + 1}. "
+                        f"Rotating to key #{((key_index + 1) % len(api_keys)) + 1} and model '{next_model}' in {delay:.1f}s..."
                     )
                 else:
                     delay = base_delay * (2 ** (attempt - 1))
                     logger.warning(
-                        f"Gemini API rate limit or transient error hit (status code: {status_code}). "
-                        f"Retrying in {delay:.1f} seconds... Error: {e}"
+                        f"Attempt {attempt}: Transient error hit (status code: {status_code}). "
+                        f"Retrying with model '{next_model}' in {delay:.1f} seconds... Error: {e}"
                     )
                 time.sleep(delay)
             else:
@@ -529,8 +527,8 @@ def main() -> None:
     parser.add_argument(
         "--model",
         type=str,
-        default=os.environ.get("GEMINI_MODEL", "gemini-3.8-flash"),
-        help="Gemini model to use (default: gemini-3.8-flash)"
+        default=os.environ.get("GEMINI_MODEL", "gemini-2.0-flash"),
+        help="Gemini model to use (default: gemini-2.0-flash)"
     )
     parser.add_argument(
         "--notes-dir",
