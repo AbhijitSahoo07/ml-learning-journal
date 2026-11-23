@@ -282,8 +282,11 @@ Ensure that all sections are concise and informative. Do not wrap the entire out
                 f"using model: '{model_name}' with key #{key_index + 1}/{len(api_keys)} ({masked_key}) "
                 f"(Attempt {attempt}/{max_retries})..."
             )
-            # Initialize Client dynamically with the rotated key
-            client = genai.Client(api_key=current_key)
+            # Initialize Client dynamically with the rotated key using v1beta API version
+            client = genai.Client(
+                api_key=current_key,
+                http_options=types.HttpOptions(api_version="v1beta")
+            )
             response = client.models.generate_content(
                 model=model_name,
                 contents=current_prompt,
@@ -294,6 +297,24 @@ Ensure that all sections are concise and informative. Do not wrap the entire out
             )
             break  # Successfully generated content, exit the retry loop
         except errors.APIError as e:
+            error_msg = str(e).lower()
+            # If the API complains about developer instruction or v1 vs v1beta, fallback to embedding system instruction in prompt
+            if "developer instruction" in error_msg or "v1beta" in error_msg:
+                logger.warning(
+                    f"Attempt {attempt}: API reported developer instruction incompatibility. "
+                    f"Retrying with instructions embedded directly into contents..."
+                )
+                try:
+                    combined_prompt = f"{system_instruction}\n\n{current_prompt}"
+                    response = client.models.generate_content(
+                        model=model_name,
+                        contents=combined_prompt,
+                        config=types.GenerateContentConfig(temperature=0.2)
+                    )
+                    break
+                except Exception as inner_e:
+                    logger.warning(f"Embedded instruction fallback attempt failed: {inner_e}")
+
             # Check if error is due to rate limits (HTTP 429) or transient server errors (HTTP 500/503/504)
             status_code = getattr(e, "code", None)
             is_rate_limit = status_code in [429, 500, 503, 504] or "quota" in str(e).lower() or "exhausted" in str(e).lower()
