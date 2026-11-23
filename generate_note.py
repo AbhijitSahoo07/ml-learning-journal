@@ -15,7 +15,9 @@ import argparse
 import datetime
 import logging
 import os
+import random
 import re
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -389,12 +391,63 @@ def generate_weekly_summary(week_number: int) -> None:
     pass
 
 
+def git_commit_and_push(file_path: Path, part: int, total: int, topic_name: str) -> bool:
+    """
+    Commit and push the generated note to git remote.
+    
+    Args:
+        file_path: Path to the generated note.
+        part: Index of this note in the batch.
+        total: Total notes in this batch.
+        topic_name: Name of the topic.
+        
+    Returns:
+        True if commit and push succeeded, False otherwise.
+    """
+    try:
+        # Stage note
+        subprocess.run(["git", "add", str(file_path)], check=True, capture_output=True, text=True)
+        
+        # Check if changes exist
+        diff = subprocess.run(["git", "diff", "--cached", "--quiet"], capture_output=True)
+        if diff.returncode == 0:
+            logger.info("No staged changes to commit.")
+            return False
+            
+        commit_msg = f"docs: Auto-generate daily learning note (Part {part} of {total} - {topic_name})"
+        subprocess.run(["git", "commit", "-m", commit_msg], check=True, capture_output=True, text=True)
+        logger.info(f"Committed: {commit_msg}")
+        
+        # Determine branch
+        branch = "main"
+        branch_check = subprocess.run(["git", "show-ref", "--quiet", "refs/heads/master"], capture_output=True)
+        if branch_check.returncode == 0:
+            branch = "master"
+            
+        # Pull with rebase or fallback merge
+        pull_rebase = subprocess.run(["git", "pull", "--rebase", "origin", branch], capture_output=True, text=True)
+        if pull_rebase.returncode != 0:
+            subprocess.run(["git", "rebase", "--abort"], capture_output=True)
+            subprocess.run(["git", "pull", "--no-rebase", "-X", "ours", "origin", branch], capture_output=True)
+            
+        push_res = subprocess.run(["git", "push", "origin", "HEAD"], capture_output=True, text=True)
+        if push_res.returncode == 0:
+            logger.info(f"Successfully pushed note to origin: {file_path.name}")
+            return True
+        else:
+            logger.warning(f"Git push returned non-zero exit code: {push_res.stderr.strip()}")
+            return False
+    except Exception as e:
+        logger.warning(f"Failed to auto-commit/push to git: {e}")
+        return False
+
+
 # =====================================================================
 # Main Flow
 # =====================================================================
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Generate a daily ML learning note using Gemini API.")
+    parser = argparse.ArgumentParser(description="Generate daily ML learning notes using Gemini API.")
     parser.add_argument(
         "--model",
         type=str,
@@ -416,18 +469,52 @@ def main() -> None:
     parser.add_argument(
         "--force",
         action="store_true",
-        help="Generate a new note even if one was already generated today."
+        help="Generate notes even if notes were already generated today."
+    )
+    parser.add_argument(
+        "--count",
+        type=int,
+        default=1,
+        help="Number of notes to generate in this run (default: 1)"
+    )
+    parser.add_argument(
+        "--random",
+        action="store_true",
+        help="Randomly pick the number of notes to generate between --min-random and --max-random (default: 1 to 10)"
+    )
+    parser.add_argument(
+        "--min-random",
+        type=int,
+        default=1,
+        help="Minimum number of notes when using --random (default: 1)"
+    )
+    parser.add_argument(
+        "--max-random",
+        type=int,
+        default=10,
+        help="Maximum number of notes when using --random (default: 10)"
     )
     parser.add_argument(
         "--max-per-day",
         type=int,
-        default=5,
-        help="Maximum number of notes to generate per day (default: 5)"
+        default=10,
+        help="Maximum number of notes to generate per day (default: 10)"
+    )
+    parser.add_argument(
+        "--delay",
+        type=float,
+        default=10.0,
+        help="Delay in seconds between consecutive note generations (default: 10.0)"
+    )
+    parser.add_argument(
+        "--push",
+        action="store_true",
+        help="Automatically git commit and push each generated note."
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Find the next topic and print it, but do not call the API or write any files."
+        help="Find upcoming topics and print them, but do not call API or write files."
     )
     
     args = parser.parse_args()
@@ -438,83 +525,105 @@ def main() -> None:
 
     logger.info("Starting Daily Note Generator...")
     
-    # 1. Check if the limit of daily notes has already been reached (to avoid accidental duplicates/excess runs)
+    # Determine target note count
+    if args.random:
+        total_notes = random.randint(args.min_random, args.max_random)
+        logger.info(f"Random mode active: selected {total_notes} note(s) to generate (range: {args.min_random}-{args.max_random}).")
+    else:
+        total_notes = max(1, args.count)
+        logger.info(f"Target note count: {total_notes}")
+
     today_str = datetime.date.today().strftime("%Y-%m-%d")
-    if not args.force and not args.dry_run:
-        today_notes = list(notes_path.glob(f"{today_str}-*.md"))
-        if len(today_notes) >= args.max_per_day:
-            logger.info(f"Already generated {len(today_notes)} note(s) today (limit: {args.max_per_day}).")
-            logger.info("Use --force to override this and generate another note.")
-            sys.exit(0)
-            
-    # 2. Get list of covered topics
+    
+    # Scan covered topics
     try:
         covered_slugs = get_covered_topics(notes_path)
         logger.info(f"Found {len(covered_slugs)} already covered topics in notes directory.")
     except Exception as e:
         logger.error(f"Error scanning notes directory: {e}")
         sys.exit(1)
-        
-    # 3. Determine the next topic
-    try:
-        next_topic_info = get_next_topic(topics_path, covered_slugs)
-    except FileNotFoundError:
-        sys.exit(1)
-    except Exception as e:
-        logger.error(f"Error reading topics file: {e}")
-        sys.exit(1)
-        
-    if not next_topic_info:
-        logger.warning("All topics in topics.txt have already been covered!")
-        # Instead of failing the GitHub Action, exit successfully with warning
-        sys.exit(0)
-        
-    topic_name, topic_slug = next_topic_info
-    logger.info(f"Next topic identified: '{topic_name}' (Slug: '{topic_slug}')")
-    
-    if args.dry_run:
-        logger.info("[Dry Run] Skipping API call and file generation.")
-        sys.exit(0)
-        
-    # 4. Generate content from Gemini API
-    try:
-        content = generate_note_content(topic_name, model_name=args.model)
-    except Exception as e:
-        logger.error(f"Failed to generate content: {e}")
-        sys.exit(1)
-        
-    # 5. Save the note
-    try:
-        saved_file = save_note(notes_path, topic_slug, content, today_str)
-        
-        # Write to GITHUB_OUTPUT environment file if available
-        github_output = os.environ.get("GITHUB_OUTPUT")
-        if github_output:
-            try:
-                with open(github_output, "a", encoding="utf-8") as f:
-                    f.write(f"note_file={saved_file.relative_to(base_dir)}\n")
-                    f.write(f"topic_name={topic_name}\n")
-                logger.info("Wrote outputs to GITHUB_OUTPUT.")
-            except Exception as e:
-                logger.error(f"Failed to write to GITHUB_OUTPUT: {e}")
-                
-    except Exception as e:
-        logger.error(f"Failed to save note: {e}")
-        sys.exit(1)
-        
-    # 6. Trigger placeholder logging for context
-    # These functions demonstrate the interface placeholders required
-    generate_daily_quiz_standalone(topic_name)
-    generate_daily_interview_questions_standalone(topic_name)
-    generate_daily_coding_exercise(topic_name)
-    generate_daily_ml_project(topic_name)
-    
-    # Example logic for weekly summaries (e.g. if covered count is a multiple of 7)
-    if len(covered_slugs) + 1 >= 7 and (len(covered_slugs) + 1) % 7 == 0:
-        week_num = (len(covered_slugs) + 1) // 7
-        generate_weekly_summary(week_num)
 
-    logger.info("Process finished successfully.")
+    generated_count = 0
+
+    for i in range(1, total_notes + 1):
+        logger.info(f"=== Note {i} of {total_notes} ===")
+
+        # 1. Check daily limit
+        if not args.force and not args.dry_run:
+            today_notes = list(notes_path.glob(f"{today_str}-*.md"))
+            if len(today_notes) >= args.max_per_day:
+                logger.info(f"Daily limit reached ({len(today_notes)}/{args.max_per_day} notes today). Halting further generation.")
+                break
+
+        # 2. Determine next topic
+        try:
+            next_topic_info = get_next_topic(topics_path, covered_slugs)
+        except FileNotFoundError:
+            sys.exit(1)
+        except Exception as e:
+            logger.error(f"Error reading topics file: {e}")
+            sys.exit(1)
+
+        if not next_topic_info:
+            logger.warning("All topics in topics.txt have already been covered!")
+            break
+
+        topic_name, topic_slug = next_topic_info
+        logger.info(f"Next topic identified: '{topic_name}' (Slug: '{topic_slug}')")
+
+        if args.dry_run:
+            logger.info(f"[Dry Run] Would generate note for: '{topic_name}'")
+            covered_slugs.add(topic_slug)
+            generated_count += 1
+            continue
+
+        # 3. Generate note content from Gemini API
+        try:
+            content = generate_note_content(topic_name, model_name=args.model)
+        except Exception as e:
+            logger.error(f"Failed to generate content for '{topic_name}': {e}")
+            break
+
+        # 4. Save the note
+        try:
+            saved_file = save_note(notes_path, topic_slug, content, today_str)
+            covered_slugs.add(topic_slug)
+            generated_count += 1
+
+            # Write to GITHUB_OUTPUT environment file if available
+            github_output = os.environ.get("GITHUB_OUTPUT")
+            if github_output:
+                try:
+                    with open(github_output, "a", encoding="utf-8") as f:
+                        f.write(f"note_file={saved_file.relative_to(base_dir)}\n")
+                        f.write(f"topic_name={topic_name}\n")
+                    logger.info("Wrote outputs to GITHUB_OUTPUT.")
+                except Exception as e:
+                    logger.error(f"Failed to write to GITHUB_OUTPUT: {e}")
+        except Exception as e:
+            logger.error(f"Failed to save note for '{topic_name}': {e}")
+            break
+
+        # 5. Git commit and push if requested
+        if args.push:
+            git_commit_and_push(saved_file, i, total_notes, topic_name)
+
+        # 6. Trigger placeholder functions
+        generate_daily_quiz_standalone(topic_name)
+        generate_daily_interview_questions_standalone(topic_name)
+        generate_daily_coding_exercise(topic_name)
+        generate_daily_ml_project(topic_name)
+
+        if len(covered_slugs) >= 7 and len(covered_slugs) % 7 == 0:
+            week_num = len(covered_slugs) // 7
+            generate_weekly_summary(week_num)
+
+        # 7. Pause between consecutive calls to avoid rate limits
+        if i < total_notes and not args.dry_run:
+            logger.info(f"Waiting {args.delay} seconds before generating next note...")
+            time.sleep(args.delay)
+
+    logger.info(f"Process completed. Successfully generated {generated_count} of {total_notes} note(s).")
 
 
 if __name__ == "__main__":

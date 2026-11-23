@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       force:
-        description: 'Force generation even if a note was already generated today'
+        description: 'Force generation even if notes were already generated today'
         required: false
         type: boolean
         default: false
@@ -16,6 +16,11 @@ on:
         required: false
         type: string
         default: 'gemini-2.5-flash'
+      count:
+        description: 'Number of notes to generate (1-10). Leave empty for random (1-10).'
+        required: false
+        type: string
+        default: ''
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -53,165 +58,56 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Generate and Commit Note 1
-        continue-on-error: true
+      - name: Generate, Commit, and Push Notes (Random 1 to 10)
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: ${{ github.event.inputs.model || 'gemini-2.5-flash' }}
+          INPUT_COUNT: ${{ github.event.inputs.count }}
+          INPUT_FORCE: ${{ github.event.inputs.force }}
         run: |
-          FORCE_FLAG=""
-          if [ "${{ github.event.inputs.force }}" = "true" ]; then
-            FORCE_FLAG="--force"
-          fi
-          python generate_note.py $FORCE_FLAG
-
           git config --local user.email "187935020+AbhijitSahoo07@users.noreply.github.com"
           git config --local user.name "AbhijitSahoo07"
-          git add notes/
-          
-          if git diff --cached --quiet; then
-            echo "No new changes for Note 1."
+
+          # Determine target number of notes: manual input or random between 1 and 10
+          if [ -n "$INPUT_COUNT" ] && [ "$INPUT_COUNT" -ge 1 ] 2>/dev/null; then
+            TARGET_COUNT=$INPUT_COUNT
+            echo "Target note count set from manual input: $TARGET_COUNT"
           else
-            git commit -m "docs: Auto-generate daily learning note (Part 1)"
-            # Pull changes with rebase, aborting if conflicts occur and using merge ours strategy as fallback
-            BRANCH="main"
-            git show-ref --quiet refs/heads/master && BRANCH="master"
-            if ! git pull --rebase origin $BRANCH; then
-              git rebase --abort 2>/dev/null || true
-              git pull --no-rebase -X ours origin $BRANCH
+            # Pick a random number between 1 and 10 (inclusive)
+            TARGET_COUNT=$(( RANDOM % 10 + 1 ))
+            echo "Randomly chosen note count for today: $TARGET_COUNT"
+          fi
+
+          BRANCH="main"
+          git show-ref --quiet refs/heads/master && BRANCH="master"
+
+          for i in $(seq 1 $TARGET_COUNT); do
+            echo "=================================================="
+            echo "Generating Note $i of $TARGET_COUNT..."
+            echo "=================================================="
+
+            if [ $i -gt 1 ]; then
+              echo "Waiting 10 seconds before next request..."
+              sleep 10
             fi
-            git push origin HEAD
-          fi
 
-      - name: Generate and Commit Note 2
-        continue-on-error: true
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: ${{ github.event.inputs.model || 'gemini-2.5-flash' }}
-        run: |
-          # Wait 10 seconds to avoid rapid consecutive requests
-          sleep 10
-          
-          # Force is only used for manual runs, but for Note 2 we always force if manual force was set
-          FORCE_FLAG=""
-          if [ "${{ github.event.inputs.force }}" = "true" ]; then
-            FORCE_FLAG="--force"
-          fi
-          python generate_note.py $FORCE_FLAG
+            # Call generate_note.py with --force and --max-per-day 10
+            python generate_note.py --force --max-per-day 10
 
-          git config --local user.email "187935020+AbhijitSahoo07@users.noreply.github.com"
-          git config --local user.name "AbhijitSahoo07"
-          git add notes/
-          
-          if git diff --cached --quiet; then
-            echo "No new changes for Note 2."
-          else
-            git commit -m "docs: Auto-generate daily learning note (Part 2)"
-            # Pull changes with rebase, aborting if conflicts occur and using merge ours strategy as fallback
-            BRANCH="main"
-            git show-ref --quiet refs/heads/master && BRANCH="master"
-            if ! git pull --rebase origin $BRANCH; then
-              git rebase --abort 2>/dev/null || true
-              git pull --no-rebase -X ours origin $BRANCH
+            git add notes/
+
+            if git diff --cached --quiet; then
+              echo "No new changes detected for Note $i. Ending generation early."
+              break
+            else
+              git commit -m "docs: Auto-generate daily learning note (Part $i of $TARGET_COUNT)"
+              
+              # Pull changes with rebase, aborting if conflicts occur and using merge ours strategy as fallback
+              if ! git pull --rebase origin $BRANCH; then
+                git rebase --abort 2>/dev/null || true
+                git pull --no-rebase -X ours origin $BRANCH
+              fi
+              git push origin HEAD
+              echo "Successfully pushed Note $i of $TARGET_COUNT."
             fi
-            git push origin HEAD
-          fi
-
-      - name: Generate and Commit Note 3
-        continue-on-error: true
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: ${{ github.event.inputs.model || 'gemini-2.5-flash' }}
-        run: |
-          # Wait 10 seconds to avoid rapid consecutive requests
-          sleep 10
-          
-          FORCE_FLAG=""
-          if [ "${{ github.event.inputs.force }}" = "true" ]; then
-            FORCE_FLAG="--force"
-          fi
-          python generate_note.py $FORCE_FLAG
-
-          git config --local user.email "187935020+AbhijitSahoo07@users.noreply.github.com"
-          git config --local user.name "AbhijitSahoo07"
-          git add notes/
-          
-          if git diff --cached --quiet; then
-            echo "No new changes for Note 3."
-          else
-            git commit -m "docs: Auto-generate daily learning note (Part 3)"
-            # Pull changes with rebase, aborting if conflicts occur and using merge ours strategy as fallback
-            BRANCH="main"
-            git show-ref --quiet refs/heads/master && BRANCH="master"
-            if ! git pull --rebase origin $BRANCH; then
-              git rebase --abort 2>/dev/null || true
-              git pull --no-rebase -X ours origin $BRANCH
-            fi
-            git push origin HEAD
-          fi
-
-      - name: Generate and Commit Note 4
-        continue-on-error: true
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: ${{ github.event.inputs.model || 'gemini-2.5-flash' }}
-        run: |
-          # Wait 10 seconds to avoid rapid consecutive requests
-          sleep 10
-          
-          FORCE_FLAG=""
-          if [ "${{ github.event.inputs.force }}" = "true" ]; then
-            FORCE_FLAG="--force"
-          fi
-          python generate_note.py $FORCE_FLAG
-
-          git config --local user.email "187935020+AbhijitSahoo07@users.noreply.github.com"
-          git config --local user.name "AbhijitSahoo07"
-          git add notes/
-          
-          if git diff --cached --quiet; then
-            echo "No new changes for Note 4."
-          else
-            git commit -m "docs: Auto-generate daily learning note (Part 4)"
-            # Pull changes with rebase, aborting if conflicts occur and using merge ours strategy as fallback
-            BRANCH="main"
-            git show-ref --quiet refs/heads/master && BRANCH="master"
-            if ! git pull --rebase origin $BRANCH; then
-              git rebase --abort 2>/dev/null || true
-              git pull --no-rebase -X ours origin $BRANCH
-            fi
-            git push origin HEAD
-          fi
-
-      - name: Generate and Commit Note 5
-        continue-on-error: true
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: ${{ github.event.inputs.model || 'gemini-2.5-flash' }}
-        run: |
-          # Wait 10 seconds to avoid rapid consecutive requests
-          sleep 10
-          
-          FORCE_FLAG=""
-          if [ "${{ github.event.inputs.force }}" = "true" ]; then
-            FORCE_FLAG="--force"
-          fi
-          python generate_note.py $FORCE_FLAG
-
-          git config --local user.email "187935020+AbhijitSahoo07@users.noreply.github.com"
-          git config --local user.name "AbhijitSahoo07"
-          git add notes/
-          
-          if git diff --cached --quiet; then
-            echo "No new changes for Note 5."
-          else
-            git commit -m "docs: Auto-generate daily learning note (Part 5)"
-            # Pull changes with rebase, aborting if conflicts occur and using merge ours strategy as fallback
-            BRANCH="main"
-            git show-ref --quiet refs/heads/master && BRANCH="master"
-            if ! git pull --rebase origin $BRANCH; then
-              git rebase --abort 2>/dev/null || true
-              git pull --no-rebase -X ours origin $BRANCH
-            fi
-            git push origin HEAD
-          fi
+          done

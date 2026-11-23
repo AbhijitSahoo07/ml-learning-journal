@@ -758,3 +758,503 @@ Project Management Experience
 Agile and Scrum Methodology
 Handling Failure in Projects
 Time Management Strategies
+OpenCV Architecture and Mat Object Internals
+OpenCV Coordinate System and Pixel Indexing
+Color Spaces and Conversions in OpenCV (BGR, RGB, HSV, HSL, LAB, YCrCb)
+Splitting and Merging Color Channels in OpenCV
+Image Arithmetic and Alpha Blending in OpenCV
+Bitwise Logical Operations on Images (AND, OR, XOR, NOT)
+Region of Interest (ROI) Extraction and Masking
+Geometric Transformations: Image Resizing and Interpolation Methods
+Geometric Transformations: Image Translation and Rotation
+Affine Transformations and Transformation Matrices in OpenCV
+Perspective Transformation and Homography Warping in OpenCV
+Image Pyramids: Gaussian Pyramids and Laplacian Pyramids
+2D Spatial Filtering and Custom Convolution Kernels
+Image Smoothing: Box Filter and Normalized Box Filter
+Image Smoothing: Gaussian Blurring and Kernel Standard Deviation
+Image Smoothing: Median Blurring for Salt-and-Pepper Noise
+Image Smoothing: Bilateral Filtering for Edge-Preserving Smoothing
+Morphological Operations: Erosion and Dilation Fundamentals
+Morphological Operations: Opening and Closing for Noise Removal
+Morphological Gradient, Top Hat, and Black Hat Transforms
+Structuring Elements and Custom Morphological Kernels
+Image Derivatives: Sobel Operator and Gradient Magnitudes
+Image Derivatives: Scharr Operator for Accurate First Derivatives
+Image Derivatives: Laplacian Operator and Second Derivatives
+Canny Edge Detection Algorithm and Hysteresis Thresholding
+Simple Global Thresholding and Binary Inversion
+Adaptive Thresholding: Mean and Gaussian Adaptive Methods
+Otsu's Binarization for Automatic Threshold Computation
+Triangle Thresholding Method in OpenCV
+Image Contours: Hierarchy and Retrieval Modes (RETR_EXTERNAL, RETR_TREE, RETR_LIST)
+Image Contours: Contour Approximation using Douglas-Peucker Algorithm
+Convex Hull and Sklansky's Algorithm in OpenCV
+Convexity Defects and Structural Analysis of Contours
+Minimum Area Bounding Boxes and Bounding Rectangles
+Minimum Enclosing Circle and Fitted Ellipses for Contours
+Image Moments and Hu Moments for Shape Descriptors
+Shape Matching using Hu Moments (cv2.matchShapes)
+Point Polygon Test in OpenCV
+Image Histograms: 1D and 2D Histogram Calculation
+Histogram Equalization for Contrast Enhancement
+Contrast Limited Adaptive Histogram Equalization (CLAHE)
+Histogram Comparison Metrics (Correlation, Chi-Square, Intersection, Bhattacharyya)
+Histogram Backprojection for Object Localization
+Template Matching: Methods (TM_CCOEFF, TM_CCORR, TM_SQDIFF) and Limitations
+Multi-Scale Template Matching in OpenCV
+Hough Transform: Standard and Probabilistic Hough Line Transform
+Hough Circle Transform for Circular Object Detection
+Corner Detection: Harris Corner Detector
+Corner Detection: Shi-Tomasi Corner Detector (Good Features to Track)
+FAST Algorithm for Corner Detection (Features from Accelerated Segment Test)
+SIFT (Scale-Invariant Feature Transform) Feature Extraction
+SURF (Speeded-Up Robust Features) Architecture and Keypoints
+ORB (Oriented FAST and Rotated BRIEF) Detector and Descriptor
+BRIEF (Binary Robust Independent Elementary Features) Descriptor
+BRISK and AKAZE Feature Detectors in OpenCV
+Feature Matching: Brute-Force Matcher with Hamming and L2 Distance
+Feature Matching: FLANN Based Matcher (Fast Library for Approximate Nearest Neighbors)
+Feature Matching: Ratio Test by David Lowe for Filtering False Matches
+Estimating Homography with RANSAC in OpenCV
+Image Stitching and Panorama Creation using OpenCV
+Video Capture and Video Stream Properties in OpenCV
+Video Writing and FourCC Codecs in OpenCV
+Frame Differencing and Motion Detection in Video Streams
+Background Subtraction: MOG2 (Mixture of Gaussians) Algorithm
+Background Subtraction: KNN (K-Nearest Neighbors) Background Subtractor
+Optical Flow: Lucas-Kanade Sparse Optical Flow
+Optical Flow: Gunner Farneback Dense Optical Flow
+Object Tracking: Meanshift Algorithm in OpenCV
+Object Tracking: Camshift (Continuously Adaptive Mean Shift) Algorithm
+OpenCV Tracking API: KCF, CSRT, and MOSSE Trackers
+Camera Models: The Pinhole Camera Model and Projection Matrix
+Intrinsic and Extrinsic Camera Parameters
+Camera Calibration using Checkerboard Patterns in OpenCV
+Lens Distortion Modeling: Radial and Tangential Distortion Correction
+Undistortion and Rectification of Camera Images
+Epipolar Geometry and the Essential Matrix
+The Fundamental Matrix and Eight-Point Algorithm in OpenCV
+Stereo Vision: Stereo Disparity and Block Matching (StereoBM, StereoSGBM)
+Depth Map Estimation from Stereo Image Pairs
+Point Cloud Generation from Stereo Depth Maps
+Image Segmentation: Watershed Algorithm with Marker-Controlled Flooding
+Image Segmentation: GrabCut Algorithm using Gaussian Mixture Models
+Superpixel Segmentation: SLIC (Simple Linear Iterative Clustering)
+Haar Cascade Classifiers for Face and Object Detection
+Histogram of Oriented Gradients (HOG) with Linear SVM for Pedestrian Detection
+OpenCV DNN Module: Loading Caffe, TensorFlow, and ONNX Models
+OpenCV DNN Module: Blob From Image Preprocessing and Normalization
+OpenCV DNN Module: GPU Acceleration with CUDA and cuDNN backend
+Image Inpainting: Navier-Stokes and Telea Inpainting Algorithms
+High Dynamic Range (HDR) Imaging: Exposure Fusion and Tone Mapping in OpenCV
+Seamless Cloning and Poisson Image Editing in OpenCV
+Fast Non-Local Means Image Denoising (cv2.fastNlMeansDenoising)
+Fourier Transform in Image Processing (cv2.dft and Magnitude Spectrum)
+High-Pass and Low-Pass Filters in the Frequency Domain
+Distance Transform and Connected Component Labeling
+Connected Components with Statistics (cv2.connectedComponentsWithStats)
+Line and Circle Fitting using M-Estimators in OpenCV
+Bounding Volume Hierarchies and Convex Polyhedra in OpenCV
+Text Detection using OpenCV EAST Text Detector
+Barcode and QR Code Detection with cv2.QRCodeDetector
+Color-Based Object Segmentation in HSV Color Space
+Skin Tone Detection and Masking with OpenCV
+Document Scanner Simulation with Perspective Warp
+Lane Detection Pipeline in OpenCV (Thresholding, ROI, Hough Transform)
+Edge-Preserving Smoothing Filters (cv2.edgePreservingFilter, cv2.detailEnhance)
+Stylization and Pencil Sketch Effects in OpenCV
+OpenCV Performance Optimization: cv2.useOptimized and cv2.setNumThreads
+Look-Up Tables (LUT) for Fast Color Mapping and Transformations
+Color Temperature and White Balance Adjustment in OpenCV
+Gamma Correction and Tone Curves in OpenCV
+Image Pyramids Blending and Laplacian Blending
+Vignetting Effect and Lens Shading Correction
+Image Sharpening using Unsharp Masking in OpenCV
+Polar Coordinate Transformations (cv2.linearPolar, cv2.logPolar)
+Dense Optical Flow Visualization using HSV Color Wheel
+Morphological Skeletonization and Thinning Algorithms in OpenCV
+Flood Fill Algorithm (cv2.floodFill) for Region Segmentation
+Sub-Pixel Corner Refinement (cv2.cornerSubPix)
+Checkerboard Corner Detection (cv2.findChessboardCorners) and Grid Refinement
+Circle Grid and ChArUco Board Calibration in OpenCV
+Camera Pose Estimation using SolvePnP and SolvePnPRansac
+Epipolar Lines Computation and Visualization in OpenCV
+Fast Explicit Diffusion and Anisotropic Diffusion Filtering
+Image Quality Metrics: PSNR (Peak Signal-to-Noise Ratio) and SSIM in OpenCV
+Real-time FPS Calculation and Latency Benchmarking in OpenCV Pipelines
+Object Localization versus Object Detection: Problem Formulation
+Bounding Box Parameterizations: XYXY, XYWH, and Normalized Coordinates
+Intersection over Union (IoU): Mathematical Formulation and Properties
+Generalized Intersection over Union (GIoU) Loss
+Distance Intersection over Union (DIoU) and Complete Intersection over Union (CIoU) Loss
+Efficient Intersection over Union (EIoU) and Wise-IoU (WIoU)
+Mean Average Precision (mAP): Precision-Recall Curves and 11-Point Interpolation
+COCO Evaluation Metrics: mAP@50 and mAP@50:95 Explained
+Non-Maximum Suppression (NMS): Greedy Algorithm and Suppression Thresholds
+Soft-NMS: Continuous Decay vs Hard Score Thresholding
+Fast NMS and Matrix NMS for Real-Time Inference
+Anchor Boxes: Concept, Aspect Ratios, and Multi-Scale Priors
+K-Means Clustering for Optimal Anchor Box Estimation
+YOLOv1 Architecture: Grid Cell Division, Regression, and Confidence Scores
+YOLOv1 Loss Function: Localization, Confidence, and Classification Penalties
+YOLOv2 (YOLO9000): Darknet-19 Backbone and Dimension Clusters
+YOLOv2: Direct Location Prediction and Passthrough Layers
+YOLOv3 Architecture: Darknet-53, Residual Connections, and Feature Pyramid Networks
+YOLOv3 Multi-Scale Detection Heads and Logistic Regression for Class Scores
+YOLOv4 Architecture: CSPDarknet53 Backbone and Cross-Stage Partial Networks
+Path Aggregation Network (PANet) in YOLOv4 and YOLOv5
+YOLOv4 Bag of Freebies: CutMix, Mosaic Data Augmentation, and Label Smoothing
+YOLOv4 Bag of Specials: Mish Activation, SPP (Spatial Pyramid Pooling), and SAM
+YOLOv5 Ecosystem: PyTorch Native Architecture and Model Variants (n, s, m, l, x)
+YOLOv5 Focus Layer and C3 Convolutional Block
+YOLOv5 AutoAnchor and Dynamic Anchor Learning
+YOLOv6 Architecture: Hardware-Friendly Design and RepVGG / RepConv Backbone
+YOLOv6 Decoupled Head and Task-Aligned Assigner (TAL)
+YOLOv7 Architecture: Extended Efficient Layer Aggregation Networks (E-ELAN)
+YOLOv7 Trainable Bag-of-Freebies and Coarse-to-Fine Lead Guided Head
+YOLOv8 Architecture: Anchor-Free Detection Head and C2f Module
+YOLOv8 Decoupled Head for Classification and Regression Branches
+YOLOv8 Loss Formulations: TaskAlignedAssigner, CIoU, and Distribution Focal Loss (DFL)
+YOLOv8 Multi-Task Support: Detection, Segmentation, Pose, and Classification
+YOLOv9 Architecture: Generalized Efficient Layer Aggregation Network (GELAN)
+YOLOv9 Programmable Gradient Information (PGI) and Auxiliary Reversible Branches
+YOLOv10 Architecture: NMS-Free Training with Consistent Dual Assignments
+YOLOv10 Holistic Efficiency-Accuracy Driven Model Design
+YOLO11 Architecture: C3k2 Blocks and Spatial Pyramid Pooling Fast (SPPF)
+YOLO11 C2PSA (Convolutional 2D Position-Sensitive Attention) Module
+YOLO-NAS Architecture: Neural Architecture Search and Quantization-Aware Blocks
+YOLO-World: Real-Time Open-Vocabulary Object Detection and Text-Visual Cross-Attention
+RT-DETR: Real-Time Detection Transformer and Comparison with YOLO
+YOLO Dataset Formats: TXT Annotations, Class IDs, and Directory Hierarchies
+Data Annotation Workflows with LabelImg, CVAT, and Roboflow for YOLO
+Mosaic Augmentation: Multi-Image Composition and Context Enrichment
+MixUp Augmentation and Copy-Paste Augmentation for YOLO Training
+Albumentations Integration with YOLO Pipelines
+Transfer Learning and Fine-Tuning Strategies on Custom YOLO Datasets
+Freezing Backbone Layers for Domain-Specific YOLO Adaptation
+Learning Rate Schedulers: OneCycleLR and Cosine Annealing in YOLO Training
+Multi-GPU Distributed Data Parallel (DDP) Training for YOLO Models
+Overfitting Detection and Regularization in YOLO Training
+Mixed Precision Training (FP16 / AMP) for Accelerated YOLO Training
+YOLO Hyperparameter Evolution: Genetic Algorithms for Anchors and Augmentations
+YOLO Instance Segmentation: Prototype Masks and Mask Coefficients (YOLOv8-seg)
+Polygon Annotations and Mask Loss (Binary Cross-Entropy) in YOLO-seg
+YOLO Pose Estimation: Keypoint Detection, Skeletons, and Heatmaps (YOLOv8-pose)
+Object Keypoint Similarity (OKS) Metric in YOLO Pose Estimation
+YOLO Oriented Bounding Boxes (OBB): Rotating Bounding Boxes for Aerial Imagery
+Angle Representation and Probabilistic IoU for Oriented Object Detection
+Object Tracking with YOLO: Integrating ByteTrack for Multi-Object Tracking
+Object Tracking with YOLO: Integrating BoT-SORT (Bag of Tricks for SORT)
+Kalman Filtering and Hungarian Algorithm in YOLO Tracking Pipelines
+Re-Identification (ReID) Features in Real-Time YOLO Tracking
+Exporting YOLO Models to ONNX Format: Dynamic vs Static Axes
+TensorRT Acceleration for YOLO: FP16 Engine Optimization
+TensorRT INT8 Post-Training Quantization (PTQ) for YOLO
+TensorRT INT8 Quantization-Aware Training (QAT) for YOLO
+OpenVINO Deployment for YOLO on Intel CPUs and iGPUs
+CoreML Conversion of YOLO for iOS and macOS Inference
+TFLite (TensorFlow Lite) Export of YOLO for Android Deployment
+DeepStream SDK Integration with YOLO for Multi-Stream Video Analytics
+Triton Inference Server: Deploying YOLO with Ensemble Pipelines
+Edge Deployment of YOLO on NVIDIA Jetson (Nano, TX2, Xavier, Orin)
+Deploying YOLO on Raspberry Pi with Neural Compute Sticks and Hailo-8
+Batch Inference Optimization for High-Throughput YOLO Pipelines
+Video Streaming Inference: RTSP and WebRTC Pipelines with YOLO
+Small Object Detection Challenges in YOLO: High-Resolution Heads and P2 Layers
+Slicing Aided Hyper Inference (SAHI) for Ultra-High-Resolution Imagery with YOLO
+Dense Object Detection and Crowd Counting with YOLO
+Thermal and Infrared Image Object Detection with YOLO
+Autonomous Driving Perception Pipelines with YOLO (Vehicles, Pedestrians, Traffic Signs)
+Drone and UAV Vision Pipelines with YOLO
+Industrial Defect Detection and Quality Control with YOLO
+Medical Imaging Object Detection with YOLO (Ultrasound, X-Ray, Pathology)
+Retail Checkout and Smart Shelf Monitoring with YOLO
+Sports Analytics and Player Tracking with YOLO Pose and Detection
+Model Pruning and Structural Sparsity in YOLO Networks
+Knowledge Distillation: Teacher-Student Networks for Compact YOLO Models
+Benchmarking YOLO Latency, Throughput, and Memory Footprint across Hardware
+Real-Time Fall Detection and Action Recognition with YOLO Pose
+Optical Character Recognition (OCR) Preprocessing Pipelines using YOLO
+Zero-Shot Object Detection with YOLO-World and Vision-Language Models
+Domain Adaptation: Synthetic Data to Real World Transfer for YOLO
+Handling Extreme Aspect Ratios and Dense Occlusion in YOLO
+Custom Loss Functions in YOLO: Focal Loss and Varifocal Loss Integration
+Real-Time License Plate Detection and Recognition (ALPR) with YOLO and OCR
+Self-Supervised Pretraining for YOLO Backbones (DINO, MAE)
+Continuous Monitoring of Model Drift and Active Learning with YOLO
+Spatial Attention Mechanisms in Modern YOLO Architectures
+Context Aggregation and Receptive Field Expansion in YOLO Heads
+Evaluating YOLO Robustness against Adversarial Perturbations
+Synthetic Data Generation with Diffusion Models for YOLO Training
+Edge TPU Acceleration for Quantized YOLO Models
+Multi-Spectral Image Object Detection with YOLO
+End-to-End Object Detection: Comparing NMS-Based YOLO vs DETR Paradigms
+YOLO Inference Profiling with NVIDIA Nsight Systems and PyTorch Profiler
+Quantization Error Analysis in Low-Bit YOLO Deployments
+Automated Data Cleaning and Label Refinement for YOLO Annotations
+AWS Machine Learning Stack: AI Services, ML Platforms, and ML Infrastructure Overview
+Amazon SageMaker Studio: Next-Gen Web-Based ML Development Environment
+Amazon SageMaker Studio Lab: Free No-Credit-Card ML Notebook Environments
+Amazon SageMaker Canvas: Visual No-Code Machine Learning for Business Analysts
+Amazon SageMaker Ground Truth: Managed Human-in-the-Loop Data Labeling
+SageMaker Ground Truth Plus: Fully Managed Turnkey Labeling Workflows
+Active Learning and Automated Labeling in SageMaker Ground Truth
+Amazon SageMaker Data Wrangler: Visual Data Preparation and Feature Transformations
+Exporting SageMaker Data Wrangler Recipes to Processing Jobs and Pipelines
+Amazon SageMaker Feature Store: Offline Store on S3 for Batch Ingestion and Training
+Amazon SageMaker Feature Store: Online Store on DynamoDB for Low-Latency Real-Time Serving
+Feature Store Ingestion: Point-in-Time Accurate Joins to Eliminate Data Leakage
+Amazon SageMaker Processing Jobs: Managed Preprocessing and Evaluation Scripts
+Distributed Data Processing with SageMaker Processing Jobs and PySpark
+Amazon SageMaker Training Jobs: Managed Ephemeral Compute Clusters
+SageMaker Built-in Algorithms (XGBoost, Linear Learner, Image Classification, Object Detection)
+SageMaker Script Mode: Bringing Custom PyTorch and TensorFlow Training Scripts
+SageMaker Bring-Your-Own-Container (BYOC) for Custom Docker Environments
+SageMaker Hyperparameter Tuning (HPO): Bayesian Optimization and Random Search
+Warm Start and Multi-Objective Hyperparameter Tuning in SageMaker
+SageMaker Distributed Training: Data Parallelism (SMDDP) for Multi-Node Scaling
+SageMaker Distributed Training: Model Parallelism (SMP) for Large Model Partitioning
+Amazon SageMaker HyperPod: Resilient Infrastructure for Foundation Model Pretraining
+Automated Health Checks and Graceful Node Recovery in SageMaker HyperPod
+Amazon SageMaker Experiments: Tracking Runs, Datasets, Metrics, and Parameters
+Managed MLflow on Amazon SageMaker for Unified Experiment Tracking
+Amazon SageMaker Model Registry: Versioning, Staging, and Approval Governance
+Model Package Groups and CI/CD Promotion with SageMaker Model Registry
+SageMaker Model Deployment: Real-Time Inference Endpoints Architecture
+SageMaker Serverless Inference: Scale-to-Zero Deployment for Intermittent Workloads
+SageMaker Asynchronous Inference: Handling Large Payloads and Long Processing Times
+SageMaker Batch Transform: High-Throughput Offline Predictions on S3 Data
+SageMaker Multi-Model Endpoints (MME): Serving Thousands of Models on Shared Compute
+SageMaker Multi-Container Endpoints (MCE): Serial and Direct Inference Pipelines
+SageMaker Inference Component: Fine-Grained GPU Allocation and Multiple Models per Instance
+SageMaker Auto Scaling: Target Tracking and Step Scaling Policies for Endpoints
+SageMaker Shadow Deployments: Testing New Models with Real Production Traffic
+SageMaker Blue/Green and Canary Deployment Strategies for Zero-Downtime Rollouts
+Amazon SageMaker Pipelines: DAG-Based Native ML Orchestration and CI/CD
+SageMaker Pipelines Parameterization, Step Caching, and Condition Steps
+Integrating GitHub Actions and AWS CodePipeline with SageMaker Pipelines
+Amazon SageMaker Clarify: Detecting Pre-Training and Post-Training Bias
+Model Explainability with SageMaker Clarify and Kernel SHAP
+Amazon SageMaker Model Monitor: Baseline Creation and Scheduled Drift Checks
+Data Drift Detection with SageMaker Model Monitor (K-L Divergence, KS Test)
+Concept Drift and Model Quality Monitoring in SageMaker Endpoints
+Bias Drift and Feature Attribution Drift with SageMaker Model Monitor
+Amazon SageMaker Neo: Deep Learning Model Compilation for Diverse Hardware Targets
+Amazon SageMaker Edge Manager: Managing ML Models on Fleets of Smart Edge Devices
+Amazon SageMaker JumpStart: Deploying Foundation Models with 1-Click
+Fine-Tuning Open-Source LLMs (Llama, Mistral) with SageMaker JumpStart
+Amazon SageMaker Autopilot: AutoML for Tabular Data and Time-Series Forecasting
+SageMaker Autopilot for Text Classification and Multi-Class Problems
+Amazon Bedrock: Architecture, Serverless Foundation Models, and Providers
+Amazon Bedrock Converse API: Unified Multi-Turn Conversational Interface
+Amazon Bedrock Knowledge Bases: Managed RAG Architecture with Vector Storage
+Chunking Strategies and Embedding Generation in Amazon Bedrock Knowledge Bases
+Amazon Bedrock Agents: Autonomous Orchestration with ReAct and Lambda Action Groups
+Amazon Bedrock Guardrails: PII Redaction, Content Filtering, and Prompt Injection Defense
+Amazon Bedrock Model Evaluation: Automated Metrics and Human Evals
+Fine-Tuning Foundation Models on Amazon Bedrock
+Bedrock Provisioned Throughput vs On-Demand Invocation: Cost and Latency Tradeoffs
+Amazon Rekognition: Label Detection, Object Localization, and Scene Understanding
+Amazon Rekognition: Face Detection, Facial Analysis, and Celebrity Recognition
+Amazon Rekognition: Face Search in Large Image Collections and Vector Indexing
+Amazon Rekognition Custom Labels: Training Custom Computer Vision Models with No Code
+Content Moderation and Safety Filtering with Amazon Rekognition
+Video Analysis at Scale with Amazon Rekognition Video and Kinesis Video Streams
+Amazon Textract: Optical Character Recognition (OCR) and Layout Analysis
+Amazon Textract Forms and Tables API: Structured Key-Value Extraction
+Amazon Textract Queries API: Natural Language Queries for Document Fields
+Amazon Textract Analyze Expense: Invoices and Receipts Automation
+Amazon Textract Analyze ID: Identity Document Processing for KYC Workflows
+Amazon Comprehend: Entity Recognition, Keyphrase Extraction, and Language Detection
+Amazon Comprehend: Sentiment Analysis and Targeted Sentiment Detection
+Amazon Comprehend Topic Modeling with Latent Dirichlet Allocation (LDA)
+Amazon Comprehend Custom Classification and Custom Entity Recognition
+Amazon Comprehend Medical: Extracting Medical Entities (ICD-10, RxNorm, SNOMED)
+Amazon Transcribe: Automatic Speech Recognition (ASR) and Batch Audio Processing
+Amazon Transcribe Streaming: Real-Time Audio Transcription over WebSockets
+Custom Vocabularies and Custom Language Models in Amazon Transcribe
+Call Analytics and Sentiment Scoring with Amazon Transcribe Call Analytics
+Amazon Polly: Text-to-Speech (TTS), Neural Voices, and Generative Voices
+Speech Synthesis Markup Language (SSML) and Speech Marks in Amazon Polly
+Amazon Lex V2: Conversational Bot Architecture (Intents, Utterances, Slots, Prompts)
+Lex V2 Integration with AWS Lambda for Dynamic Fulfillment
+Multi-Language and Multi-Modal Bots with Amazon Lex V2
+Amazon Kendra: Intelligent Enterprise Search Engine Powered by Machine Learning
+Kendra Document Connectors (S3, Confluence, SharePoint, Salesforce) and Facets
+Amazon Personalize: User-Personalization, Similar Items, and Personalized Ranking
+Cold Start Strategies and Real-Time Event Tracking in Amazon Personalize
+Amazon Forecast: Time-Series Forecasting using DeepAR+ and CNN-QR Algorithms
+Amazon CloudSearch and OpenSearch Service for ML Workloads
+AWS OpenSearch Service: Vector Search and Approximate k-NN with HNSW and IVF
+Amazon OpenSearch Serverless Vector Engine for Serverless Embedding Storage
+Amazon MemoryDB for Redis: Fast In-Memory Vector Search for GenAI
+AWS Compute for ML: EC2 GPU Instances (G4dn, G5, G6, P4d, P5 H100)
+AWS Trainium and Trn1 Instances: Custom Silicon for Distributed Model Training
+AWS Inferentia and Inf2 Instances: High-Throughput, Cost-Effective Inference
+AWS Neuron SDK: Compiling PyTorch Models for Trainium and Inferentia
+AWS Elastic Container Service (ECS) for ML Microservices and Model Serving
+AWS Elastic Kubernetes Service (EKS): Deploying Kubeflow, Ray, and Triton on AWS
+GPU Sharing and Slicing on AWS EKS (NVIDIA Multi-Instance GPU - MIG)
+AWS Lambda with Container Images for Serverless Deep Learning Inference
+Cold Start Mitigation for AWS Lambda ML Functions
+AWS Batch: Scalable Ephemeral Compute for Large-Scale Batch Inference Pipelines
+Amazon S3 for ML Data Lakes: Storage Classes, Lifecycle Rules, and Multi-Part Uploads
+High-Performance S3 Access for ML: Mountpoint for Amazon S3 and S3 Express One Zone
+AWS Glue: Data Catalog, Crawlers, and Serverless Spark ETL for ML Datasets
+Amazon Athena: Serverless SQL Queries on ML Datasets Stored in S3
+Amazon EMR: Running Apache Spark, PySpark, and Ray on Big Data Clusters
+Amazon Kinesis Data Streams and Firehose for Real-Time ML Feature Ingestion
+Amazon Managed Streaming for Apache Kafka (MSK) for Real-Time ML Pipelines
+AWS Step Functions: Visual Workflow Orchestration for Multi-Step ML Pipelines
+AWS IAM Best Practices for ML: Least Privilege Roles, Resource Policies, and Trust Policies
+Securing SageMaker Environments: VPC Private Subnets and VPC Endpoints (PrivateLink)
+Encryption at Rest and in Transit for ML: AWS KMS Customer Managed Keys
+AWS CloudTrail and CloudWatch Logs: Auditing and Observability for ML Endpoints
+Cost Optimization Strategies for ML on AWS (Savings Plans, Spot Instances, Scale-to-Zero)
+Well-Architected Framework: Machine Learning Lens Best Practices on AWS
+MLOps Maturity Model on AWS: From Manual Notebooks to Fully Automated CI/CD/CT
+SageMaker Geospatial Capabilities: Satellite Imagery and Earth Observation ML
+SageMaker Clarify for Generative AI: Hallucination and Toxicity Evaluation
+AWS HealthLake: Transforming Unstructured Healthcare Data with NLP and Analytics
+AWS AppFabric for Generative AI Productivity and Security
+Amazon Q Developer: Machine Learning Code Generation and Vulnerability Remediation
+Amazon Q Business: Enterprise Generative AI Assistant with Permission Controls
+AWS Clean Rooms ML: Privacy-Preserving Collaborative Machine Learning
+Amazon Monitron: Machine Learning for Industrial Predictive Maintenance
+AWS Panorama: Computer Vision at the Edge with Custom Appliances
+Distributed Cache Acceleration for Deep Learning on AWS with FSx for Lustre
+SageMaker Fast File Mode and Pipe Mode for Optimized S3 Data Streaming
+AWS Fault Injection Service (FIS) for Testing ML Endpoint Resilience
+AWS Serverless ML Architecture Patterns (API Gateway, Lambda, DynamoDB)
+Model Card Governance in Amazon SageMaker for Responsible AI Compliance
+Text Tokenization: Word-Level, Character-Level, and Subword Tokenization Fundamentals
+Byte-Pair Encoding (BPE) Algorithm: Vocabulary Building and Merging Rules
+WordPiece Tokenization Algorithm used in BERT
+SentencePiece Tokenizer: Unigram Language Model and Language-Agnostic Subwords
+Byte-Level BPE in Modern LLMs (GPT-2, GPT-4, LLaMA Tokenizers)
+Out-of-Vocabulary (OOV) Problem and Special Tokens ([CLS], [SEP], [PAD], [MASK], <s>, </s>)
+Text Normalization: Lemmatization vs Stemming (Porter, Snowball, WordNet)
+Unicode Normalization (NFC, NFD, NFKC, NFKD) for Multilingual NLP
+N-gram Language Models and Maximum Likelihood Estimation
+Smoothing Techniques in Classical Language Models (Good-Turing, Kneser-Ney Smoothing)
+Language Model Evaluation: Perplexity (PPL) and Cross-Entropy Loss
+TF-IDF (Term Frequency - Inverse Document Frequency) and Vector Space Representations
+BM25 (Best Matching 25) Probabilistic Ranking Function for Information Retrieval
+Part-of-Speech (POS) Tagging with Hidden Markov Models (HMM) and Viterbi Algorithm
+Named Entity Recognition (NER) with Conditional Random Fields (CRF)
+Dependency Parsing: Transition-Based vs Graph-Based Parsers
+Word2Vec: Continuous Bag of Words (CBOW) Architecture
+Word2Vec: Skip-Gram Architecture and Negative Sampling Optimization
+Hierarchical Softmax and Huffman Trees in Word2Vec
+GloVe (Global Vectors for Word Representation): Objective Function and Co-occurrence Matrix
+FastText: Character N-grams for Morphologically Rich Languages
+Contextual vs Static Word Embeddings: ELMo (Embeddings from Language Models)
+Sequence-to-Sequence (Seq2Seq) Architecture: Encoder-Decoder Bottleneck Problem
+Bahdanau Additive Attention Mechanism
+Luong Multiplicative (Dot-Product) Attention Mechanism
+The Transformer Architecture: Detailed Walkthrough of the 2017 Landmark Paper
+Scaled Dot-Product Attention: Mathematical Derivation and Why Scaling Matters
+Multi-Head Attention (MHA): Projection Matrices and Representation Subspaces
+Multi-Query Attention (MQA) and Grouped-Query Attention (GQA) for Efficient LLM Serving
+Positional Encodings: Sinusoidal Positional Encoding in Original Transformer
+Learned Positional Embeddings vs Relative Positional Encodings
+Rotary Position Embedding (RoPE): Theory, Complex Numbers, and Implementation in LLaMA
+ALiBi (Attention with Linear Biases): Length Extrapolation without Positional Embeddings
+Pre-LayerNorm vs Post-LayerNorm: Stability in Deep Transformer Training
+RMSNorm (Root Mean Square Normalization) in Modern LLMs
+Feed-Forward Networks in Transformers: SwiGLU, GeLU, and ReLU Activation Functions
+Masked Multi-Head Attention and Causal Language Modeling in Decoder-Only Transformers
+Encoder-Only vs Decoder-Only vs Encoder-Decoder Transformers Comparison
+BERT (Bidirectional Encoder Representations from Transformers): Pretraining Objectives (MLM, NSP)
+RoBERTa: Robustly Optimized BERT Pretraining Approach and Hyperparameter Insights
+DistilBERT: Knowledge Distillation for Lightweight Transformers
+ALBERT: Cross-Layer Parameter Sharing and Factorized Embedding Parameterization
+DeBERTa: Disentangled Attention and Enhanced Mask Decoder
+T5 (Text-to-Text Transfer Transformer): Architecture, Span Corruption, and Unified Framework
+BART: Denoising Sequence-to-Sequence Pretraining for Generation and Summarization
+GPT Series Evolution: From GPT-1 to GPT-4 Architectural Paradigms
+LLaMA Family: Architectural Innovations, Pretraining Data Curation, and Open-Weights Impact
+LLaMA 3 Architecture: 8B and 70B Architectural Details, 128k Tokenizer, and Performance
+Mistral 7B and Mixtral 8x7B: Sliding Window Attention and Sparse Mixture of Experts
+DeepSeek-V2 and DeepSeek-V3: Multi-Head Latent Attention (MLA) and DeepSeekMoE
+Mixture of Experts (MoE) Architecture: Router Networks, Load Balancing Loss, and Capacity Factor
+Parameter-Efficient Fine-Tuning (PEFT) Overview and Taxonomy
+LoRA (Low-Rank Adaptation): Mathematical Intuition, Rank r, Alpha Scaling, and Target Weights
+QLoRA (Quantized Low-Rank Adaptation): 4-bit NormalFloat (NF4), Double Quantization, and Paged Optimizers
+Prefix Tuning and Prompt Tuning: Soft Prompts vs Model Weight Updates
+P-Tuning v1 and v2: Reparameterization of Continuous Prompts with MLPs/LSTMs
+IA3 (Infused Adapter by Inhibiting and Amplifying Inner Activations)
+Supervised Fine-Tuning (SFT): Instruction Datasets, Alpaca Format, and Loss Masking
+RLHF (Reinforcement Learning from Human Feedback): End-to-End Pipeline
+Reward Model Training: Pairwise Comparison Loss and Bradley-Terry Preference Model
+Proximal Policy Optimization (PPO) in RLHF: Actor, Critic, Value Model, and Reference Policy
+KL-Divergence Penalty in RLHF to Prevent Reward Hacking and Model Drift
+Direct Preference Optimization (DPO): Eliminating the Reinforcement Learning Loop
+Kahneman-Tversky Optimization (KTO): Binary Signals and Prospect Theory in LLM Alignment
+Odds Ratio Preference Optimization (ORPO): Monolithic Alignment without Separate SFT Phase
+Synthetic Data Generation for LLM Pretraining and Fine-Tuning (Evol-Instruct, Self-Instruct)
+Prompt Engineering: In-Context Learning and Few-Shot Demonstration Selection
+Chain-of-Thought (CoT) Prompting: Zero-Shot CoT, Few-Shot CoT, and Least-to-Most Prompting
+Self-Consistency Decoding in Chain-of-Thought Reasoning
+Tree-of-Thoughts (ToT) and Graph-of-Thoughts (GoT) for Deliberate Problem Solving
+ReAct (Reasoning + Acting) Framework for Tool-Augmented LLM Agents
+Directional Stimulus Prompting and Skeleton-of-Thought Generation
+Prompt Injection Attacks: Direct Injections, Indirect Injections, and Defensive Strategies
+Jailbreak Attacks (PAIR, GCG, Persona Modulation) and Guardrails Architectures
+Retrieval-Augmented Generation (RAG): Naive RAG Architecture and Information Flow
+Advanced RAG: Pre-Retrieval, Retrieval, and Post-Retrieval Optimizations
+Modular RAG: Routing, Query Rewriting, and Multi-Hop Reasoning
+Document Chunking Strategies: Fixed-Size, Sentence-Split, Recursive Character, and Semantic Chunking
+Agentic Chunking and Proposition-Based Chunking for RAG
+Bi-Encoder Architectures for Dense Retrieval (Sentence-BERT, Contriever, E5, BGE)
+Cross-Encoder Architectures for Reranking and Semantic Relevance Scoring
+Hybrid Search in RAG: Combining Dense Embeddings with Sparse BM25 Keyword Search
+Reciprocal Rank Fusion (RRF) for Merging Ranked Search Results
+Contextual Retrieval: Appending Chunk Explanations to Preserve Semantic Context
+Query Transformation in RAG: Sub-Query Decomposition and Step-Back Prompting
+Hypothetical Document Embeddings (HyDE) for Vocabulary Mismatch Mitigation
+Lost in the Middle Phenomenon: Long-Context Information Degradation and Mitigation
+Vector Databases: Architecture, Indexing Mechanisms, and Storage Tradeoffs
+Approximate Nearest Neighbor (ANN) Algorithms: Hierarchical Navigable Small World (HNSW)
+Vector Quantization: Product Quantization (PQ) and Inverted File Index (IVF-PQ)
+GraphRAG: Constructing Knowledge Graphs for Multi-Hop and Global Document Synthesis
+RAG Evaluation Frameworks: RAGAS Metrics (Faithfulness, Answer Relevance, Context Recall, Context Precision)
+TruLens Framework: Groundedness, Answer Relevance, and Context Relevance Feedback Loops
+LLM Inference Mechanics: Prefill Phase (Prompt Processing) vs Decode Phase (Token Generation)
+Key-Value (KV) Caching in Autoregressive Generation: Memory Footprint and Computation
+PagedAttention and vLLM: Virtual Memory Allocation for Zero Memory Waste in KV Cache
+Continuous Batching vs Dynamic Batching for High-Throughput LLM Serving
+Model Quantization: Post-Training Quantization (PTQ) vs Quantization-Aware Training (QAT)
+Weight-Only Quantization vs Weight-and-Activation Quantization (W8A8, W4A16, W4A4)
+GPTQ (Generative Pre-trained Transformer Quantization): Layer-Wise Second-Order Error Minimization
+AWQ (Activation-aware Weight Quantization): Protecting Salient Weights
+GGUF and GGML Format: CPU and Apple Silicon Inference with llama.cpp
+Bitsandbytes: 8-bit Matrix Multiplication and 4-bit Quantization
+Speculative Decoding: Draft Models and Target Model Verification for Faster Generation
+FlashAttention-1, FlashAttention-2, and FlashAttention-3: IO-Aware Tiling and Kernel Fusion
+Medusa and Lookahead Decoding: Multi-Head Prediction for Speculative Acceleration
+Extractive vs Abstractive Text Summarization Pipelines
+Aspect-Based Sentiment Analysis (ABSA) with Transformers
+Neural Machine Translation (NMT): Encoders, Decoders, and Attention Alignments
+Translation Evaluation Metrics: BLEU, SacreBLEU, METEOR, and COMET
+Summarization Evaluation: ROUGE-1, ROUGE-2, ROUGE-L, and BertScore
+Hallucination in Large Language Models: Types, Causes, and Mitigation Strategies
+LLM-as-a-Judge: Single-Answer Grading, Pairwise Comparison, and Position Bias Mitigation
+Guardrails Frameworks: NeMo Guardrails, Llama Guard, and Guardrails AI
+Structured Outputs with LLMs: JSON Mode, Instructor, and Outlines Schema Enforcement
+Context Window Extension: RoPE Scaling (Linear, Dynamic NTK-Aware, YaRN)
+Mechanistic Interpretability in LLMs: Probing, Circuits, and Activation Patching
+Linear Attention and State Space Models: Mamba, S4, and RWKV Architectures
+Contrastive Learning for Embeddings: InfoNCE Loss and Triplet Loss
+Zero-Shot and Few-Shot Learning in Modern Multimodal LLMs (Vision-Language Models)
+Safety Alignment: Red Teaming, Constitutional AI, and Representation Engineering
+Contrastive Decoding and Classifier-Free Guidance in Text Generation
+Token Healing and Regex-Constrained Token Generation
+Multilingual LLM Pretraining Challenges and Cross-Lingual Transfer
+Code Generation with LLMs: HumanEval, StarCoder, and Execution-Based Evaluation
+Reasoning Models and Test-Time Compute: OpenAI o1 Paradigm and Search in Reasoning
+Semantic Caching for LLM Queries using GPTCache and Vector Similarity
+Knowledge Distillation from Frontier Models to Compact Local LLMs
+Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection
+Corrective RAG (CRAG): Robust Language Model Generation with Self-Corrective Retrieval
