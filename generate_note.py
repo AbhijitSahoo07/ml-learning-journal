@@ -116,28 +116,49 @@ def get_next_topic(topics_file: Path, covered_slugs: Set[str]) -> Optional[Tuple
     return None
 
 
-def generate_note_content(topic: str, model_name: str = "gemini-2.5-flash") -> str:
+def get_gemini_api_keys() -> list[str]:
+    """
+    Collect all Gemini API keys from environment variables.
+    Supports GEMINI_API_KEY, GEMINI_API_KEYS, or GEMINI_API_KEY_1, GEMINI_API_KEY_2, etc.,
+    with comma-separated, semicolon-separated, or newline-separated values.
+    
+    Returns:
+        A list of unique API key strings.
+    """
+    keys = []
+    for env_var, value in os.environ.items():
+        if env_var.startswith("GEMINI_API_KEY") and value:
+            for k in re.split(r"[,;\n\r]+", value):
+                k = k.strip()
+                if k and k not in keys:
+                    keys.append(k)
+    return keys
+
+
+def generate_note_content(topic: str, model_name: str = "gemini-2.5-flash", key_offset: Optional[int] = None) -> str:
     """
     Call the Gemini API using the google-genai library to generate a note for the given topic.
+    Supports seamless automatic key rotation and rate-limit bypass across multiple API keys.
     
     Args:
         topic: The topic name.
         model_name: The Gemini model identifier.
+        key_offset: Optional starting key index for round-robin rotation.
         
     Returns:
         The generated markdown content as a string.
         
     Raises:
-        ValueError: If the API returns an empty response.
+        ValueError: If the API returns an empty response or no API keys found.
         Exception: For API errors or connection failures.
     """
-    api_key_env = os.environ.get("GEMINI_API_KEY")
-    if not api_key_env:
+    api_keys = get_gemini_api_keys()
+    if not api_keys:
         logger.error("GEMINI_API_KEY environment variable is not set.")
         raise ValueError("GEMINI_API_KEY environment variable is not set.")
 
-    # Support multiple comma-separated keys for rate-limiting rotation
-    api_keys = [k.strip() for k in api_key_env.split(",") if k.strip()]
+    if key_offset is None:
+        key_offset = random.randint(0, len(api_keys) - 1)
 
     system_instruction = (
         "You are an expert AI and Machine Learning educator. Your goal is to write a highly detailed, "
@@ -243,8 +264,10 @@ Ensure that all sections are concise and informative. Do not wrap the entire out
     response = None
 
     for attempt in range(1, max_retries + 1):
-        # Rotate API key based on the attempt number
-        current_key = api_keys[(attempt - 1) % len(api_keys)]
+        # Rotate API key based on the key_offset and attempt number
+        key_index = (key_offset + attempt - 1) % len(api_keys)
+        current_key = api_keys[key_index]
+        masked_key = f"{current_key[:6]}...{current_key[-4:]}" if len(current_key) > 10 else "***"
         
         # Switch to fallback prompt (retrieving less content) on attempt 3 or later to avoid token/rate limits
         current_prompt = prompt if attempt < 3 else fallback_prompt
@@ -256,7 +279,8 @@ Ensure that all sections are concise and informative. Do not wrap the entire out
         try:
             logger.info(
                 f"Sending request to Gemini API for topic: '{topic}' "
-                f"using model: '{model_name}' (Attempt {attempt}/{max_retries})..."
+                f"using model: '{model_name}' with key #{key_index + 1}/{len(api_keys)} ({masked_key}) "
+                f"(Attempt {attempt}/{max_retries})..."
             )
             # Initialize Client dynamically with the rotated key
             client = genai.Client(api_key=current_key)
@@ -275,11 +299,19 @@ Ensure that all sections are concise and informative. Do not wrap the entire out
             is_rate_limit = status_code in [429, 500, 503, 504] or "quota" in str(e).lower() or "exhausted" in str(e).lower()
 
             if is_rate_limit and attempt < max_retries:
-                delay = base_delay * (2 ** (attempt - 1))
-                logger.warning(
-                    f"Gemini API rate limit or transient error hit (status code: {status_code}). "
-                    f"Retrying in {delay:.1f} seconds... Error: {e}"
-                )
+                # If multiple keys are available, rotate immediately to next key with brief 1.5s pause
+                if len(api_keys) > 1 and attempt < len(api_keys):
+                    delay = 1.5
+                    logger.warning(
+                        f"Gemini API rate limit hit on key #{key_index + 1}. "
+                        f"Immediately rotating to next key #{((key_index + 1) % len(api_keys)) + 1} in {delay}s..."
+                    )
+                else:
+                    delay = base_delay * (2 ** (attempt - 1))
+                    logger.warning(
+                        f"Gemini API rate limit or transient error hit (status code: {status_code}). "
+                        f"Retrying in {delay:.1f} seconds... Error: {e}"
+                    )
                 time.sleep(delay)
             else:
                 logger.error(f"Gemini API error occurred on attempt {attempt}: {e}")
@@ -577,9 +609,9 @@ def main() -> None:
             generated_count += 1
             continue
 
-        # 3. Generate note content from Gemini API
+        # 3. Generate note content from Gemini API (rotating starting key index)
         try:
-            content = generate_note_content(topic_name, model_name=args.model)
+            content = generate_note_content(topic_name, model_name=args.model, key_offset=i - 1)
         except Exception as e:
             logger.error(f"Failed to generate content for '{topic_name}': {e}")
             break

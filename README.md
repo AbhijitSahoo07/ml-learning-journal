@@ -123,12 +123,23 @@ python generate_note.py --random
 
 To let GitHub Actions run the generation process automatically every day, you need to configure your Gemini API Key as a repository secret.
 
-1. Go to your repository on GitHub.
-2. Navigate to **Settings** > **Secrets and variables** > **Actions**.
-3. Click on the **New repository secret** button.
-4. Set the name to: `GEMINI_API_KEY`
-5. Paste your API key into the **Secret** field.
-6. Click **Add secret** to save.
+### 🔑 Adding Multiple API Keys (Bypassing Rate & Quota Limits)
+You can provide **multiple API keys** to distribute traffic, avoid rate limits (15 RPM), and bypass daily quota exhaustion. The generator automatically round-robins across all keys and instantly rotates if a key encounters a rate limit or quota warning.
+
+Choose either setup:
+* **Option A (Single Secret - Comma-Separated):**
+  1. In **Settings** > **Secrets and variables** > **Actions**, edit or create `GEMINI_API_KEY`.
+  2. Enter your keys separated by commas (or newlines):
+     ```text
+     AIzaSyKey1...,AIzaSyKey2...,AIzaSyKey3...
+     ```
+* **Option B (Separate Secrets):**
+  Create individual secrets named:
+  * `GEMINI_API_KEY_1`
+  * `GEMINI_API_KEY_2`
+  * `GEMINI_API_KEY_3` ... (up to 5 or more)
+
+The script automatically detects all keys, balances the load per note, and rotates keys with minimal delay when limits are hit.
 
 ### Workflow Configuration Details
 The workflow `.github/workflows/daily_note.yml` uses the `github-actions[bot]` user to securely commit and push changes back to the repository. It has the `contents: write` permission enabled to allow automated commits.
