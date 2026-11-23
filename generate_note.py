@@ -135,7 +135,7 @@ def get_gemini_api_keys() -> list[str]:
     return keys
 
 
-def generate_note_content(topic: str, model_name: str = "gemini-2.5-flash", key_offset: Optional[int] = None) -> str:
+def generate_note_content(topic: str, model_name: str = "gemini-3.8-flash", key_offset: Optional[int] = None) -> str:
     """
     Call the Gemini API using the google-genai library to generate a note for the given topic.
     Supports seamless automatic key rotation and rate-limit bypass across multiple API keys.
@@ -152,6 +152,11 @@ def generate_note_content(topic: str, model_name: str = "gemini-2.5-flash", key_
         ValueError: If the API returns an empty response or no API keys found.
         Exception: For API errors or connection failures.
     """
+    # Automatically upgrade deprecated model identifiers
+    if "2.5-flash" in model_name:
+        logger.info(f"Upgrading deprecated model identifier '{model_name}' to 'gemini-3.8-flash'.")
+        model_name = "gemini-3.8-flash"
+
     api_keys = get_gemini_api_keys()
     if not api_keys:
         logger.error("GEMINI_API_KEY environment variable is not set.")
@@ -298,6 +303,26 @@ Ensure that all sections are concise and informative. Do not wrap the entire out
             break  # Successfully generated content, exit the retry loop
         except errors.APIError as e:
             error_msg = str(e).lower()
+            # If the API reports model not found / deprecated (e.g. gemini-2.5-flash deprecated for gemini-3.8-flash)
+            if "no longer available" in error_msg or "gemini-3.8-flash" in error_msg or (getattr(e, "code", None) == 404 and "2.5" in model_name):
+                logger.warning(
+                    f"Attempt {attempt}: Model '{model_name}' is deprecated or not found. "
+                    f"Upgrading model to 'gemini-3.8-flash' and retrying immediately..."
+                )
+                model_name = "gemini-3.8-flash"
+                try:
+                    response = client.models.generate_content(
+                        model=model_name,
+                        contents=current_prompt,
+                        config=types.GenerateContentConfig(
+                            system_instruction=system_instruction,
+                            temperature=0.2,
+                        )
+                    )
+                    break
+                except Exception as model_fallback_e:
+                    logger.warning(f"Fallback to gemini-3.8-flash failed: {model_fallback_e}")
+
             # If the API complains about developer instruction or v1 vs v1beta, fallback to embedding system instruction in prompt
             if "developer instruction" in error_msg or "v1beta" in error_msg:
                 logger.warning(
@@ -504,8 +529,8 @@ def main() -> None:
     parser.add_argument(
         "--model",
         type=str,
-        default=os.environ.get("GEMINI_MODEL", "gemini-2.5-flash"),
-        help="Gemini model to use (default: gemini-2.5-flash)"
+        default=os.environ.get("GEMINI_MODEL", "gemini-3.8-flash"),
+        help="Gemini model to use (default: gemini-3.8-flash)"
     )
     parser.add_argument(
         "--notes-dir",

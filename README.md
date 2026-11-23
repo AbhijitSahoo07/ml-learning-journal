@@ -5,7 +5,7 @@
 [![Gemini](https://img.shields.io/badge/powered%20by-Gemini-orange.svg)](https://deepmind.google/technologies/gemini/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-An automated, serverless system that writes, formats, and publishes high-quality Machine Learning learning notes daily. Using the **Gemini 2.5 Flash API** and **GitHub Actions**, this repository generates a dynamic number of comprehensive educational notes each day (randomly picking between 1 and 10 notes daily), with mathematical breakdowns, working Python code examples, interview questions, and quizzes without requiring any active computer or local server.
+An automated, serverless system that writes, formats, and publishes high-quality Machine Learning learning notes daily. Using the **Gemini 3.8 Flash API** and **GitHub Actions**, this repository generates a dynamic number of comprehensive educational notes each day (randomly picking between 1 and 10 notes daily), with mathematical breakdowns, working Python code examples, interview questions, and quizzes without requiring any active computer or local server.
 
 ---
 
