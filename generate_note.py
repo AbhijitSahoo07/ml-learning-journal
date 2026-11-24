@@ -241,7 +241,8 @@ Keep the output strictly under 100 words in raw markdown."""
                 config=types.GenerateContentConfig(
                     system_instruction=system_instruction,
                     temperature=0.2,  # Lower temperature for educational accuracy
-                    max_output_tokens=350,  # Strictly limit output to ~100 words
+                    thinking_config=types.ThinkingConfig(thinking_budget=0),  # Disable thinking tokens to preserve full text
+                    max_output_tokens=1024,  # Ample headroom for complete ~100-word note
                 )
             )
             break  # Successfully generated content, exit the retry loop
@@ -262,7 +263,8 @@ Keep the output strictly under 100 words in raw markdown."""
                         contents=combined_prompt,
                         config=types.GenerateContentConfig(
                             temperature=0.2,
-                            max_output_tokens=350,
+                            thinking_config=types.ThinkingConfig(thinking_budget=0),
+                            max_output_tokens=1024,
                         )
                     )
                     break
