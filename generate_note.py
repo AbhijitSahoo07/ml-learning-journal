@@ -277,10 +277,10 @@ Keep the output strictly under 100 words in raw markdown."""
 
             if (is_high_demand or is_rate_limit or status_code == 500) and attempt < max_retries:
                 if len(api_keys) > 1:
-                    delay = 2.0
+                    delay = max(4.0, base_delay * (1.3 ** (attempt - 1)))
                     logger.warning(
                         f"Attempt {attempt}: Hit status {status_code} ({'High Demand/503' if is_high_demand else 'Rate Limit'}). "
-                        f"Rotating to next API key #{((key_index + 1) % len(api_keys)) + 1} in {delay:.1f}s..."
+                        f"Rotating to next API key #{((key_index + 1) % len(api_keys)) + 1} and backing off for {delay:.1f}s..."
                     )
                 else:
                     delay = base_delay * (1.5 ** (attempt - 1))
@@ -632,6 +632,9 @@ def main() -> None:
             time.sleep(args.delay)
 
     logger.info(f"Process completed. Successfully generated {generated_count} of {total_notes} note(s).")
+    if generated_count == 0 and not args.dry_run:
+        logger.error("No notes were generated in this run.")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

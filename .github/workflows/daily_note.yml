@@ -93,6 +93,7 @@ jobs:
           BRANCH="main"
           git show-ref --quiet refs/heads/master && BRANCH="master"
 
+          SUCCESSFUL_NOTES=0
           for i in $(seq 1 $TARGET_COUNT); do
             echo "=================================================="
             echo "Generating Note $i of $TARGET_COUNT..."
@@ -103,15 +104,21 @@ jobs:
               sleep 10
             fi
 
-            # Call generate_note.py with --force and --max-per-day 10
-            python generate_note.py --force --max-per-day 10
+            # Call generate_note.py with up to 2 attempts per note
+            NOTE_SUCCESS=false
+            for note_attempt in 1 2; do
+              if python generate_note.py --force --max-per-day 10; then
+                git add notes/
+                if ! git diff --cached --quiet; then
+                  NOTE_SUCCESS=true
+                  break
+                fi
+              fi
+              echo "Attempt $note_attempt for Note $i did not produce changes. Backing off for 15s before retry..."
+              sleep 15
+            done
 
-            git add notes/
-
-            if git diff --cached --quiet; then
-              echo "No new changes detected for Note $i. Ending generation early."
-              break
-            else
+            if [ "$NOTE_SUCCESS" = "true" ]; then
               git commit -m "docs: Auto-generate daily learning note (Part $i of $TARGET_COUNT)"
               
               # Pull changes with rebase, aborting if conflicts occur and using merge ours strategy as fallback
@@ -121,5 +128,16 @@ jobs:
               fi
               git push origin HEAD
               echo "Successfully pushed Note $i of $TARGET_COUNT."
+              SUCCESSFUL_NOTES=$(( SUCCESSFUL_NOTES + 1 ))
+            else
+              echo "Warning: Could not generate Note $i after retries. Continuing to next note so daily batch is not aborted..."
             fi
           done
+
+          echo "=================================================="
+          echo "Daily Note Generation Summary: $SUCCESSFUL_NOTES of $TARGET_COUNT note(s) successfully pushed."
+          echo "=================================================="
+          if [ "$SUCCESSFUL_NOTES" -eq 0 ]; then
+            echo "Error: Zero notes were generated today."
+            exit 1
+          fi
